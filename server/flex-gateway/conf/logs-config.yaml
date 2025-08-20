@@ -1,0 +1,20 @@
+# Docs on cloudwatch configuration: https://docs.fluentbit.io/manual/pipeline/outputs/cloudwatch
+apiVersion: gateway.mulesoft.com/v1alpha1
+kind: Configuration
+metadata:
+  name: logging-config
+spec:
+  logging:
+    outputs:
+      - name: stdout
+        type: stdout
+        parameters:
+          format: json_lines
+
+    runtimeLogs:
+      logLevel: info
+      outputs:
+        - stdout
+    accessLogs:
+      outputs:
+        - stdout

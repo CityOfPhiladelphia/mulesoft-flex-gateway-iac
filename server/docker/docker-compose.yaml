@@ -1,0 +1,85 @@
+version: "3.3"
+
+networks:
+  loki:
+
+services:
+  loki:
+    image: grafana/loki:latest
+    ports:
+      - "3100:3100"
+    volumes:
+      - ./loki/loki-config.yaml:/etc/loki/local-config.yaml
+    command: -config.file=/etc/loki/local-config.yaml
+    networks:
+      - loki
+
+  prometheus:
+    image: prom/prometheus:main
+    ports:
+      - "9090:9090"
+    command:
+      - --web.enable-remote-write-receiver
+      - --config.file=/etc/prometheus/prometheus.yml
+    networks:
+      - loki
+
+  grafana:
+    environment:
+      - GF_PATHS_PROVISIONING=/etc/grafana/provisioning
+      - GF_AUTH_ANONYMOUS_ENABLED=false
+      - GF_AUTH_ANONYMOUS_ORG_ROLE=Admin
+      - GF_FEATURE_TOGGLES_ENABLE=alertingSimplifiedRouting,alertingQueryAndExpressionsStepMode
+      - GF_SERVER_DOMAIN=citygeo-grafana-dev
+      - GF_SERVER_ROOT_URL=https://citygeo-grafana-dev.phila.gov/
+      # Database connection
+      - GF_DATABASE_TYPE=postgres
+      - GF_DATABASE_HOST
+      - GF_DATABASE_NAME
+      - GF_DATABASE_USER
+      - GF_DATABASE_SSL_MODE=require
+      - GF_DATABASE_PASSWORD
+      # Azure AD
+      - GF_AUTH_AZUREAD_NAME=Azure AD
+      - GF_AUTH_AZUREAD_ENABLED=false
+      - GF_AUTH_AZUREAD_ALLOW_SIGN_UP=true
+      - GF_AUTH_AZUREAD_AUTO_LOGIN=false
+      - GF_AUTH_AZUREAD_CLIENT_AUTHENTICATION=client_secret_post
+      - GF_AUTH_AZUREAD_CLIENT_ID
+      - GF_AUTH_AZUREAD_CLIENT_SECRET
+      - GF_AUTH_AZUREAD_SCOPES=openid email profile
+      - GF_AUTH_AZUREAD_AUTH_URL
+      - GF_AUTH_AZUREAD_TOKEN_URL
+    entrypoint:
+      - sh
+      - -euc
+      - |
+        mkdir -p /etc/grafana/provisioning/datasources
+        cat <<EOF > /etc/grafana/provisioning/datasources/ds.yaml
+        apiVersion: 1
+        datasources:
+        - name: Loki
+          type: loki
+          access: proxy
+          orgId: 1
+          url: http://loki:3100
+          basicAuth: false
+          isDefault: true
+          version: 1
+          editable: false
+        - name: Prometheus
+          type: prometheus
+          access: proxy
+          orgId: 1
+          url: http://prometheus:9090
+          basicAuth: false
+          isDefault: false
+          version: 1
+          editable: false
+        EOF
+        /run.sh
+    image: grafana/grafana:latest
+    ports:
+      - "80:3000"
+    networks:
+      - loki

@@ -1,0 +1,36 @@
+export APP_NAME=$1
+export ENV_NAME=$2
+# Set hostname to `app-env-{old hostname}`
+sudo hostnamectl hostname "${APP_NAME}-${ENV_NAME}-$(hostnamectl hostname)"
+# Make sure we are in the "server" folder
+cd ~/mulesoft-iac/server
+# This script is to be run as ec2-user, not as root
+# Install docker, nginx, and cronie
+sudo dnf install -y docker nginx cronie
+# Add ec2-user to docker group
+sudo usermod -a -G docker ec2-user
+# Start docker
+sudo systemctl start docker
+sudo systemctl enable docker
+# Copy registration from s3
+export S3_NAME=$(aws ssm get-parameter --name "/$APP_NAME/$ENV_NAME/s3_name")
+export REGISTRATION_S3_KEY=$(aws ssm get-parameter --name "/$APP_NAME/$ENV_NAME/registration_s3_key")
+aws s3 cp s3://$S3_NAME/$REGISTRATION_S3_KEY conf/registration.yaml
+# Run all these commands as ec2-user (required because it establishes new docker group)
+sudo -u ec2-user --preserve-env=APP_NAME,ENV_NAME -i <<'EOF'
+echo hello
+EOF
+
+# Good! Flex gateway should be up and running, time to install grafana alloy for monitoring
+# Alloy cannot be installed until its gpg key is imported
+wget -q -O gpg.key https://rpm.grafana.com/gpg.key
+sudo rpm --import gpg.key
+echo -e '[grafana]\nname=grafana\nbaseurl=https://rpm.grafana.com\nrepo_gpgcheck=1\nenabled=1\ngpgcheck=1\ngpgkey=https://rpm.grafana.com/gpg.key\nsslverify=1\nsslcacert=/etc/pki/tls/certs/ca-bundle.crt' | sudo tee /etc/yum.repos.d/grafana.repo
+# Install alloy
+sudo yum update -y
+sudo dnf install -y alloy
+# Copy our config into the right file
+sudo cp alloy/config.alloy.hcl /etc/alloy/config.alloy
+# Start alloy!
+sudo systemctl start alloy
+sudo systemctl enable alloy.service

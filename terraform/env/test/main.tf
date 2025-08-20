@@ -1,0 +1,43 @@
+terraform {
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "~> 6.0"
+    }
+    secretsmanager = {
+      source  = "keeper-security/secretsmanager"
+      version = ">= 1.1.5"
+    }
+  }
+}
+
+provider "aws" {
+  region  = "us-east-1"
+  profile = "mulesoft"
+}
+
+provider "secretsmanager" {
+  credential = file("~/client-config.json")
+}
+
+module "flex_gateway" {
+  source = "../../modules/flex_gateway"
+
+  env_name = "test"
+  app_name = "flex-gateway"
+  dev_mode = true
+  # *.phila.gov
+  acm_cert_arn = "arn:aws:acm:us-east-1:975050025792:certificate/dc0c25c0-84e6-45aa-90b5-590f8bd8296c"
+  # Non-prod vpc
+  vpc_id = "vpc-0003c2fc508cbdab4"
+  # Non-prod subnet public zone A then B
+  alb_subnet_ids = ["subnet-021a798c801a6de15", "subnet-04befa32beadb1606"]
+  asg_subnet_ids = ["subnet-021a798c801a6de15", "subnet-04befa32beadb1606"]
+  # EC2
+  ec2_instance_type = "t3.small"
+  ssh_key_name      = "dev-key"
+  # non-prod remote SG
+  ssh_sg_id = "sg-0014e8d551f6d514b"
+  # Shared GSG -> Flex-Gateway -> Test-Registration
+  registration_keeper_id = "lv4qSA1x9r_hBnPhx-HX_A"
+}
