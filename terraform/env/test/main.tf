@@ -30,9 +30,9 @@ module "flex_gateway" {
   acm_cert_arn = "arn:aws:acm:us-east-1:975050025792:certificate/dc0c25c0-84e6-45aa-90b5-590f8bd8296c"
   # Non-prod vpc
   vpc_id = "vpc-0003c2fc508cbdab4"
-  # Non-prod subnet public zone A then B
-  alb_subnet_ids = ["subnet-021a798c801a6de15", "subnet-04befa32beadb1606"]
-  asg_subnet_ids = ["subnet-021a798c801a6de15", "subnet-04befa32beadb1606"]
+  # Non-prod subnet private zone A then B
+  alb_subnet_ids = ["subnet-0ff7f0642b438fbeb", "subnet-0d5478758a826841e"]
+  asg_subnet_ids = ["subnet-0ff7f0642b438fbeb", "subnet-0d5478758a826841e"]
   # EC2
   ec2_instance_type = "t3.small"
   ssh_key_name      = "dev-key"

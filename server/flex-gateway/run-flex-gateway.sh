@@ -5,7 +5,7 @@ cd "$(dirname "$0")"
 # Make the logs directory (might be unneeded)
 mkdir -p ./logs
 echo 'AssetName (aka DNS?) in our registration.yaml:'
-cat flex-gateway-conf-dir/registration.yaml | grep assetName
+cat conf/registration.yaml | grep assetName
 
 docker run \
   --rm \

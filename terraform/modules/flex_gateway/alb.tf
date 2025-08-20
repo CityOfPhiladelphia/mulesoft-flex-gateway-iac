@@ -4,8 +4,8 @@ resource "aws_lb_target_group" "http" {
   protocol    = "HTTP"
   vpc_id      = var.vpc_id
   target_type = "instance"
-  # Grafana doesn't have many long running requests so 1 minute should be enough
-  deregistration_delay = 60
+  # Flex gateway may have relatively long outstanding requests so lets use the full 5 minutes
+  deregistration_delay = 300
 
   health_check {
     enabled = true

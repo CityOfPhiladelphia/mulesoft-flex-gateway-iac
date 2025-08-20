@@ -9,17 +9,27 @@ cd ~/mulesoft-iac/server
 sudo dnf install -y docker nginx cronie
 # Add ec2-user to docker group
 sudo usermod -a -G docker ec2-user
-# Start docker
+# Start docker, nginx, crond
 sudo systemctl start docker
 sudo systemctl enable docker
+sudo systemctl start nginx
+sudo systemctl enable nginx
+sudo systemctl start crond
+sudo systemctl enable crond
 # Copy registration from s3
-export S3_NAME=$(aws ssm get-parameter --name "/$APP_NAME/$ENV_NAME/s3_name")
-export REGISTRATION_S3_KEY=$(aws ssm get-parameter --name "/$APP_NAME/$ENV_NAME/registration_s3_key")
+export S3_NAME=$(aws ssm get-parameter --name "/$APP_NAME/$ENV_NAME/s3_name" --query "Parameter.Value" --output text)
+export REGISTRATION_S3_KEY=$(aws ssm get-parameter --name "/$APP_NAME/$ENV_NAME/registration_s3_key" --query "Parameter.Value" --output text)
 aws s3 cp s3://$S3_NAME/$REGISTRATION_S3_KEY conf/registration.yaml
 # Run all these commands as ec2-user (required because it establishes new docker group)
 sudo -u ec2-user --preserve-env=APP_NAME,ENV_NAME -i <<'EOF'
-echo hello
+cd ~/mulesoft-iac/server/flex-gateway
+bash run-flex-gateway.sh
 EOF
+
+# Set up cron health check
+sudo mv flex-gateway/health-check.sh /root/health-check.sh
+sudo chmod u+x /root/health-check.sh
+echo "* * * * * root /root/health-check.sh" | sudo tee /etc/cron.d/flex-gateway-health-check
 
 # Good! Flex gateway should be up and running, time to install grafana alloy for monitoring
 # Alloy cannot be installed until its gpg key is imported

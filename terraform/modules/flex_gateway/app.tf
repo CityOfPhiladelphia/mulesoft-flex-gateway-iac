@@ -53,9 +53,9 @@ resource "aws_launch_template" "main" {
   user_data = base64encode(<<EOF
 #!/bin/bash
 exec > >(tee /var/log/user-data.log|logger -t user-data -s 2>/dev/console) 2>&1
-#dnf install -y git
-#sudo -u ec2-user bash -c 'cd ~; git clone https://github.com/CityOfPhiladelphia/grafana-iac.git'
-#sudo -u ec2-user bash -c 'cd ~/grafana-iac; bash server/build.sh ${var.app_name} ${var.env_name}'
+dnf install -y git
+sudo -u ec2-user bash -c 'cd ~; git clone https://github.com/CityOfPhiladelphia/mulesoft-iac.git'
+sudo -u ec2-user bash -c 'cd ~/mulesoft-iac; bash server/build.sh ${var.app_name} ${var.env_name}'
 EOF
   )
 
