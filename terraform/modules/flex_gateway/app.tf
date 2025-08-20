@@ -80,4 +80,9 @@ resource "aws_autoscaling_group" "main" {
     id      = aws_launch_template.main.id
     version = "$Default"
   }
+
+  # Terraform won't change the size
+  lifecycle {
+    ignore_changes = [min_size, max_size]
+  }
 }

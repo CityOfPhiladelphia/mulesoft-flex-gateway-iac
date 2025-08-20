@@ -21,7 +21,7 @@ resource "aws_autoscaling_attachment" "main" {
 
 resource "aws_lb" "main" {
   name               = "${var.app_name}-${var.env_name}"
-  internal           = true
+  internal           = false
   load_balancer_type = "application"
   subnets            = var.alb_subnet_ids
   security_groups    = [aws_security_group.alb.id]
@@ -30,10 +30,28 @@ resource "aws_lb" "main" {
   tags                       = local.default_tags
 }
 
-resource "aws_lb_listener" "main" {
+resource "aws_lb_listener" "http" {
   load_balancer_arn = aws_lb.main.arn
   port              = "80"
   protocol          = "HTTP"
+
+  default_action {
+    type = "redirect"
+
+    redirect {
+      port        = "443"
+      protocol    = "HTTPS"
+      status_code = "HTTP_301"
+    }
+  }
+}
+
+resource "aws_lb_listener" "https" {
+  load_balancer_arn = aws_lb.main.arn
+  port              = "443"
+  protocol          = "HTTPS"
+  certificate_arn   = var.acm_cert_arn
+  ssl_policy        = "ELBSecurityPolicy-TLS13-1-2-Res-2021-06"
 
   default_action {
     type             = "forward"

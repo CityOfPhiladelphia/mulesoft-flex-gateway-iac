@@ -23,7 +23,7 @@ provider "secretsmanager" {
 module "flex_gateway" {
   source = "../../modules/flex_gateway"
 
-  env_name = "test"
+  env_name = "dev"
   app_name = "flex-gateway"
   dev_mode = true
   # *.phila.gov
@@ -39,6 +39,6 @@ module "flex_gateway" {
   ssh_key_name      = "dev-key"
   # non-prod remote SG
   ssh_sg_id = "sg-0014e8d551f6d514b"
-  # Shared GSG -> Flex-Gateway -> Test-Registration
-  registration_keeper_id = "lv4qSA1x9r_hBnPhx-HX_A"
+  # Shared GSG -> Flex-Gateway -> Dev-Registration
+  registration_keeper_id = "Atnut-qOEErxdf83itZxFg"
 }
