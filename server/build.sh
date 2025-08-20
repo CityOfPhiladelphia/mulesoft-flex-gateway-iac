@@ -19,7 +19,7 @@ sudo systemctl enable crond
 # Copy registration from s3
 export S3_NAME=$(aws ssm get-parameter --name "/$APP_NAME/$ENV_NAME/s3_name" --query "Parameter.Value" --output text)
 export REGISTRATION_S3_KEY=$(aws ssm get-parameter --name "/$APP_NAME/$ENV_NAME/registration_s3_key" --query "Parameter.Value" --output text)
-aws s3 cp s3://$S3_NAME/$REGISTRATION_S3_KEY conf/registration.yaml
+aws s3 cp s3://$S3_NAME/$REGISTRATION_S3_KEY flex-gateway/conf/registration.yaml
 # Run all these commands as ec2-user (required because it establishes new docker group)
 sudo -u ec2-user --preserve-env=APP_NAME,ENV_NAME -i <<'EOF'
 cd ~/mulesoft-iac/server/flex-gateway

@@ -1,6 +1,6 @@
-resource "aws_lb_target_group" "http" {
-  name        = "${var.app_name}-${var.env_name}-http"
-  port        = 80
+resource "aws_lb_target_group" "flex_gateway" {
+  name        = "${var.app_name}-${var.env_name}-flex-gateway"
+  port        = 8081
   protocol    = "HTTP"
   vpc_id      = var.vpc_id
   target_type = "instance"
@@ -9,13 +9,14 @@ resource "aws_lb_target_group" "http" {
 
   health_check {
     enabled = true
+    port    = 80
     path    = "/custom-health-check.html"
   }
 }
 
 resource "aws_autoscaling_attachment" "main" {
   autoscaling_group_name = aws_autoscaling_group.main.id
-  lb_target_group_arn    = aws_lb_target_group.http.arn
+  lb_target_group_arn    = aws_lb_target_group.flex_gateway.arn
 }
 
 resource "aws_lb" "main" {
@@ -36,6 +37,6 @@ resource "aws_lb_listener" "main" {
 
   default_action {
     type             = "forward"
-    target_group_arn = aws_lb_target_group.http.arn
+    target_group_arn = aws_lb_target_group.flex_gateway.arn
   }
 }

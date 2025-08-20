@@ -15,6 +15,7 @@ resource "aws_vpc_security_group_egress_rule" "ec2_outbound_all_to_everywhere" {
   cidr_ipv4   = "0.0.0.0/0"
 }
 
+# For health check
 resource "aws_vpc_security_group_ingress_rule" "ec2_inbound_http_from_alb" {
   security_group_id = aws_security_group.ec2.id
   description       = "Inbound http access from ALB"
@@ -22,6 +23,16 @@ resource "aws_vpc_security_group_ingress_rule" "ec2_inbound_http_from_alb" {
   ip_protocol                  = "tcp"
   from_port                    = 80
   to_port                      = 80
+  referenced_security_group_id = aws_security_group.alb.id
+}
+
+resource "aws_vpc_security_group_ingress_rule" "ec2_inbound_flex_gateway_from_alb" {
+  security_group_id = aws_security_group.ec2.id
+  description       = "Inbound http access from ALB"
+
+  ip_protocol                  = "tcp"
+  from_port                    = 8081
+  to_port                      = 8081
   referenced_security_group_id = aws_security_group.alb.id
 }
 

@@ -250,7 +250,7 @@ loki.process "fluentbit" {
 
 loki.write "local" {
   endpoint {
-    // This is a local URL that only works because Alloy and Loki are on the same machine
+    // TODO: Update this
     url = "http://10.30.80.106:3100/loki/api/v1/push"
   }
 }
