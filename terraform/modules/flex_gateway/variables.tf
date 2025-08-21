@@ -11,6 +11,11 @@ variable "dev_mode" {
   description = "Enable to disable any type of deletion protection"
 }
 
+variable "abcd1234" {
+  type        = string
+  description = "unused variable!"
+}
+
 # VPC
 variable "vpc_id" {
   type = string
