@@ -1,4 +1,6 @@
 terraform {
+  required_version = "~> 1.12"
+
   required_providers {
     aws = {
       source  = "hashicorp/aws"
@@ -35,7 +37,7 @@ module "flex_gateway" {
   # Non-prod subnet private zone A then B
   asg_subnet_ids = ["subnet-0ff7f0642b438fbeb", "subnet-0d5478758a826841e"]
   # EC2
-  ec2_instance_type = "t3.small"
+  ec2_instance_type = "t3.smalbl"
   ssh_key_name      = "dev-key"
   # non-prod remote SG
   ssh_sg_id = "sg-0014e8d551f6d514b"
