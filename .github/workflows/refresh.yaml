@@ -3,6 +3,26 @@ on:
   push:
 
 jobs:
+  flexctl:
+    runs-on: self-hosted
+    container: mulesoft/flex-gateway:latest
+
+    steps:
+      - name: Retrieve secrets from Keeper
+        id: ksecrets
+        uses: Keeper-Security/ksm-action@master
+        with:
+          keeper-secret-config: ${{ secrets.KSM_CONFIG }}
+          secrets: |-
+            lv4qSA1x9r_hBnPhx-HX_A/file/mulesoft_test_reg.yml > file:/registration/registration.yaml
+            LXdIN2HmAPOOPec9x79Iew/field/login > env:FLEXCTL_LOGIN
+            LXdIN2HmAPOOPec9x79Iew/field/password > env:FLEXCTL_PASSWORD
+      - name: Inspect registration
+        run: |
+          echo $FLEXCTL_PASSWORD
+          echo $FLEXCTL_LOGIN
+          flexctl registration inspect
+
   get_cert:
     runs-on: self-hosted
     container: buildpack-deps:bookworm
