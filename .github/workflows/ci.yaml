@@ -11,7 +11,9 @@ jobs:
     steps:
       - name: Install requirements
         run: |
-          apt install -y jq
+          export DEBIAN_FRONTEND=noninteractive
+          apt-get update
+          apt-get install -y jq
       - name: Checkout code
         uses: actions/checkout@v4
         with:
