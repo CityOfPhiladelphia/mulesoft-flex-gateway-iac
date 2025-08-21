@@ -5,7 +5,7 @@ on:
 jobs:
   refresh:
     runs-on: self-hosted
-    container: buildpack-deps:bookworm
+    # container: buildpack-deps:bookworm
 
     steps:
       - name: Create registration directory
