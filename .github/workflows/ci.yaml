@@ -60,7 +60,7 @@ jobs:
           cd $TF_DIR
           tflint --init
 
-      - name: Run TFLint
+      - name: Run TFLint on module
         run: |
           cd $TF_DIR
-          tflint -f compact
+          tflint --recursive -f compact
