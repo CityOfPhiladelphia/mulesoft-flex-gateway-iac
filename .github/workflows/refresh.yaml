@@ -5,6 +5,7 @@ on:
 jobs:
   get_cert:
     runs-on: self-hosted
+    container: buildpack-deps:bookworm
 
     steps:
       - name: Retrieve secrets from Keeper
