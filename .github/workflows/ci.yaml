@@ -16,11 +16,16 @@ jobs:
       - uses: actions/checkout@v4
         name: Checkout source code
 
+      - name: Calculate tflint config hash
+        id: hash
+        run: |
+          echo "hash=$(sha256sum $TF_DIR/.tflint.hcl | cut -d' ' -f1)" >> $GITHUB_OUTPUT
+
       - uses: actions/cache@v4
         name: Cache plugin dir
         with:
           path: ~/.tflint.d/plugins
-          key: ${{ matrix.os }}-tflint-${{ hashFiles('$TF_DIR/.tflint.hcl') }}
+          key: ${{ matrix.os }}-tflint-${{ steps.hash.outputs.hash }}
 
       - uses: terraform-linters/setup-tflint@v4
         name: Setup TFLint
