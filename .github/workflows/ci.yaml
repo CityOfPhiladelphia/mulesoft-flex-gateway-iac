@@ -66,4 +66,15 @@ jobs:
       - name: Run TFLint on module
         run: |
           cd $TF_DIR
-          tflint --recursive -f compact
+          cd modules/flex_gateway
+          tflint -f compact
+      - name: Run TFLint on test
+        run: |
+          cd $TF_DIR
+          cd env/test
+          tflint -f compact
+      - name: Run TFLint on dev
+        run: |
+          cd $TF_DIR
+          cd env/dev
+          tflint -f compact
