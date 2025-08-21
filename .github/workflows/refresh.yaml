@@ -21,7 +21,7 @@ jobs:
         with:
           keeper-secret-config: ${{ secrets.KSM_CONFIG }}
           secrets: |-
-            lv4qSA1x9r_hBnPhx-HX_A/file/registration.yaml > file:${{ runner.temp }}/registration/cur_registration.yaml
+            KOvpmbsoepm69o3k7iAcVQ/file/registration.yaml > file:${{ runner.temp }}/registration/cur_registration.yaml
             LXdIN2HmAPOOPec9x79Iew/field/login > env:FLEXCTL_LOGIN
             LXdIN2HmAPOOPec9x79Iew/field/password > env:FLEXCTL_PASSWORD
       - name: Docker pull flex-Gateway
