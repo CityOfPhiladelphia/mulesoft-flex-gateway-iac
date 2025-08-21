@@ -37,7 +37,7 @@ jobs:
           docker pull keeper/keeper-secrets-manager-cli:latest
       - name: Test upload to Keeper
         run: |
-          echo "bogus" > ${{ runner.temp }}/registration/temp.txt
+          echo "bogus2" > ${{ runner.temp }}/registration/temp.txt
           docker run --rm -it -e KSM_CONFIG=${{ secrets.KSM_CONFIG }} \
           -v "${{ runner.temp }}/registration":/tmp/registration
           keeper/keeper-secrets-manager-cli:latest ksm upload \
