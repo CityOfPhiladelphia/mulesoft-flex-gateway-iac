@@ -8,6 +8,11 @@ jobs:
     # container: buildpack-deps:bookworm
 
     steps:
+      # THIS STEP IS ONLY NECESSARY BECAUSE WE DON'T USE ACTIONS RUNNER CONTROLER,
+      # WHICH WE REALLY SHOULD USE. THERE IS A POTENTIAL RACE CONDITION HERE
+      - name: Delete previous registration directory
+        run: |
+          rm -rf ${{ runner.temp }}/registration
       - name: Create registration directory
         run: |
           mkdir ${{ runner.temp }}/registration
