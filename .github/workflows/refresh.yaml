@@ -32,7 +32,7 @@ jobs:
         with:
           keeper-secret-config: ${{ secrets.KSM_CONFIG }}
           secrets: |-
-            {{ env.KSM_SECRET_UID }}/file/registration.yaml > file:${{ runner.temp }}/registration/cur_registration.yaml
+            ${{ KSM_SECRET_UID }}/file/registration.yaml > file:${{ runner.temp }}/registration/cur_registration.yaml
             LXdIN2HmAPOOPec9x79Iew/field/login > env:FLEXCTL_LOGIN
             LXdIN2HmAPOOPec9x79Iew/field/password > env:FLEXCTL_PASSWORD
       - name: Docker pull flex-Gateway
@@ -69,5 +69,5 @@ jobs:
           docker run --rm -e KSM_CONFIG=${{ secrets.KSM_CONFIG }} \
           -v "${{ runner.temp }}/registration":/tmp/registration \
           keeper/keeper-secrets-manager-cli:latest ksm secret upload \
-          -u {{ env.KSM_SECRET_UID }} --file /tmp/registration/registration.yaml \
+          -u ${{ KSM_SECRET_UID }} --file /tmp/registration/registration.yaml \
           --title registration.yaml
