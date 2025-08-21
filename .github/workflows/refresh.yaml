@@ -14,7 +14,8 @@ jobs:
           keeper-secret-config: ${{ secrets.KSM_CONFIG }}
           secrets: |-
             # Reference records by UID
-            lv4qSA1x9r_hBnPhx-HX_A/file/mulesoft_test_reg.yml > file:~/mulesoft_test_reg.yml
+            ahJIwNclElg70ifRs7T1qw/field/password > env:PASSWORD
+            # lv4qSA1x9r_hBnPhx-HX_A/file/mulesoft_test_reg.yml > file:~/mulesoft_test_reg.yml
       - name: List home dir
         run: |
-          ls ~
+          echo $PASSWORD
