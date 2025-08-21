@@ -21,7 +21,7 @@ jobs:
         with:
           keeper-secret-config: ${{ secrets.KSM_CONFIG }}
           secrets: |-
-            lv4qSA1x9r_hBnPhx-HX_A/file/mulesoft_test_reg.yml > file:${{ runner.temp }}/registration/cur_registration.yaml
+            lv4qSA1x9r_hBnPhx-HX_A/file/registration.yaml > file:${{ runner.temp }}/registration/cur_registration.yaml
             LXdIN2HmAPOOPec9x79Iew/field/login > env:FLEXCTL_LOGIN
             LXdIN2HmAPOOPec9x79Iew/field/password > env:FLEXCTL_PASSWORD
       - name: Docker pull flex-Gateway
@@ -42,4 +42,4 @@ jobs:
           -v "${{ runner.temp }}/registration":/tmp/registration \
           keeper/keeper-secrets-manager-cli:latest ksm secret upload \
           -u KOvpmbsoepm69o3k7iAcVQ --file /tmp/registration/temp.txt \
-          --title temp.txt
+          --title registration.yaml
