@@ -26,5 +26,5 @@ jobs:
       - name: Check registration
         run: |
           docker run --entrypoint flexctl \
-          -v "${{ runner.temp }}/registration":/tmp/registration \
+          -v "${{ runner.temp }}/registration":/tmp/registration mulesoft/flex-gateway \
           registration inspect -f /tmp/registration/cur_registration.yaml
