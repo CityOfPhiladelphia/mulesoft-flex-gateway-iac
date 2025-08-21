@@ -5,7 +5,6 @@ on:
 jobs:
   refresh:
     runs-on: self-hosted
-    # container: buildpack-deps:bookworm
 
     steps:
       # THIS STEP IS ONLY NECESSARY BECAUSE WE DON'T USE ACTIONS RUNNER CONTROLER,
@@ -30,6 +29,17 @@ jobs:
           docker pull mulesoft/flex-gateway:latest
       - name: Check registration
         run: |
-          docker run --entrypoint flexctl \
+          docker run --rm --entrypoint flexctl \
           -v "${{ runner.temp }}/registration":/tmp/registration mulesoft/flex-gateway \
           registration inspect -f /tmp/registration/cur_registration.yaml
+      - name: Docker pull keeper
+        run: |
+          docker pull keeper/keeper-secrets-manager-cli:latest
+      - name: Test upload to Keeper
+        run: |
+          echo "bogus" > ${{ runner.temp }}/registration/temp.txt
+          docker run --rm -it -e KSM_CONFIG=${{ secrets.KSM_CONFIG }} \
+          -v "${{ runner.temp }}/registration":/tmp/registration
+          keeper/keeper-secrets-manager-cli:latest ksm upload \
+          -u KOvpmbsoepm69o3k7iAcVQ --file /tmp/registration/temp.txt \
+          --title temp.txt
