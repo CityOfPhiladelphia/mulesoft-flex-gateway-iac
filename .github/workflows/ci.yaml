@@ -7,8 +7,6 @@ env:
 jobs:
   tflint:
     runs-on: self-hosted
-    container:
-      image: ghcr.io/terraform-linters/tflint
 
     steps:
       - uses: actions/checkout@v4
@@ -25,10 +23,10 @@ jobs:
           path: ~/.tflint.d/plugins
           key: ${{ matrix.os }}-tflint-${{ steps.hash.outputs.hash }}
 
-      #- uses: terraform-linters/setup-tflint@v4
-      #  name: Setup TFLint
-      #  with:
-      #    tflint_version: latest
+      - uses: terraform-linters/setup-tflint@v4
+        name: Setup TFLint
+        with:
+          tflint_version: latest
 
       - name: Show version
         run: |

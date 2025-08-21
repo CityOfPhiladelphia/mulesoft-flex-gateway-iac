@@ -1,0 +1,20 @@
+name: Refresh Flex Gateway Cert
+on:
+  workflow_dispatch:
+
+jobs:
+  get_cert:
+    runs-on: self-hosted
+
+    steps:
+      - name: Retrieve secrets from Keeper
+        id: ksecrets
+        uses: Keeper-Security/ksm-action@master
+        with:
+          keeper-secret-config: ${{ secrets.KSM_CONFIG }}
+          secrets: |-
+            # Reference records by UID
+            lv4qSA1x9r_hBnPhx-HX_A/file/mulesoft_test_reg.yml > file:~/mulesoft_test_reg.yml
+      - name: List home dir
+        run: |
+          ls ~
