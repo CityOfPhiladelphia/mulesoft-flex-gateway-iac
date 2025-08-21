@@ -35,7 +35,7 @@ jobs:
       - name: Renew registration
         run: |
           docker run --rm --entrypoint flexctl \
-          -u $UID -v "${{ runner.temp }}/registration":/tmp/registration
+          -u $UID -v "${{ runner.temp }}/registration":/tmp/registration \
           mulesoft/flex-gateway \
           registration renew \
           --client-id=$FLEXCTL_LOGIN \
