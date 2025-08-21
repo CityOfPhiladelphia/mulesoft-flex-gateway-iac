@@ -14,7 +14,6 @@ data "aws_ssm_parameter" "kms_id" {
   name = "/mulesoft/common/kms_id"
 }
 
-// Shared-GSG -> Flex-Gateway -> rds
 data "secretsmanager_file" "registration" {
   path = var.registration_keeper_id
 }

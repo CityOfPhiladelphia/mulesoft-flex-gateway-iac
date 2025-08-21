@@ -1,0 +1,72 @@
+name: Refresh Flex Gateway Cert
+on:
+  workflow_dispatch:
+    inputs:
+      ksmSecretUID:
+        description: "KMS Secret UID"
+        required: true
+        default: "lv4qSA1x9r_hBnPhx-HX_A"
+
+jobs:
+  refresh:
+    runs-on: self-hosted
+    # NO matrix until ARC
+    #strategy:
+    #  matrix:
+    #    # Test, Dev
+    #    KSM_SECRET_UID: [lv4qSA1x9r_hBnPhx-HX_A, Atnut-qOEErxdf83itZxFg]
+
+    steps:
+      # THIS STEP IS ONLY NECESSARY BECAUSE WE DON'T USE ACTIONS RUNNER CONTROLER,
+      # WHICH WE REALLY SHOULD USE. THERE IS A POTENTIAL RACE CONDITION HERE
+      - name: Delete previous registration directory
+        run: |
+          rm -rf ${{ runner.temp }}/registration
+      - name: Create registration directory
+        run: |
+          mkdir ${{ runner.temp }}/registration
+      - name: Retrieve secrets from Keeper
+        id: ksecrets
+        uses: Keeper-Security/ksm-action@master
+        with:
+          keeper-secret-config: ${{ secrets.KSM_CONFIG }}
+          secrets: |-
+            ${{ github.events.inputs.kmsSecretUID }}/file/registration.yaml > file:${{ runner.temp }}/registration/cur_registration.yaml
+            LXdIN2HmAPOOPec9x79Iew/field/login > env:FLEXCTL_LOGIN
+            LXdIN2HmAPOOPec9x79Iew/field/password > env:FLEXCTL_PASSWORD
+      - name: Docker pull flex-Gateway
+        run: |
+          docker pull mulesoft/flex-gateway:latest
+      - name: Check current registration
+        run: |
+          docker run --rm --entrypoint flexctl \
+          -v "${{ runner.temp }}/registration":/tmp/registration mulesoft/flex-gateway \
+          registration inspect -f /tmp/registration/cur_registration.yaml
+      - name: Renew registration
+        run: |
+          docker run --rm --entrypoint flexctl \
+          -u $UID -v "${{ runner.temp }}/registration":/tmp/registration \
+          mulesoft/flex-gateway \
+          registration renew \
+          --client-id=$FLEXCTL_LOGIN \
+          --client-secret=$FLEXCTL_PASSWORD \
+          --output-directory=/tmp/registration \
+          /tmp/registration/cur_registration.yaml
+      - name: List temp dir
+        run: |
+          ls ${{ runner.temp }}
+      - name: Check new registration
+        run: |
+          docker run --rm --entrypoint flexctl \
+          -v "${{ runner.temp }}/registration":/tmp/registration mulesoft/flex-gateway \
+          registration inspect -f /tmp/registration/registration.yaml
+      - name: Docker pull keeper
+        run: |
+          docker pull keeper/keeper-secrets-manager-cli:latest
+      - name: Upload new cert to Keeper
+        run: |
+          docker run --rm -e KSM_CONFIG=${{ secrets.KSM_CONFIG }} \
+          -v "${{ runner.temp }}/registration":/tmp/registration \
+          keeper/keeper-secrets-manager-cli:latest ksm secret upload \
+          -u ${{ github.events.inputs.kmsSecretUID }} --file /tmp/registration/registration.yaml \
+          --title registration.yaml
