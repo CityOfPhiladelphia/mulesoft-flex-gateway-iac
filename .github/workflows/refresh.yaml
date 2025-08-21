@@ -1,12 +1,11 @@
 name: Refresh Flex Gateway Cert
 on:
-  push:
-
-env:
-  # test
-  # KSM_SECRET_UID: lv4qSA1x9r_hBnPhx-HX_A
-  # dev
-  KSM_SECRET_UID: Atnut-qOEErxdf83itZxFg
+  workflow_dispatch:
+    inputs:
+      ksmSecretUID:
+        description: "KMS Secret UID"
+        required: true
+        default: "lv4qSA1x9r_hBnPhx-HX_A"
 
 jobs:
   refresh:
@@ -32,7 +31,7 @@ jobs:
         with:
           keeper-secret-config: ${{ secrets.KSM_CONFIG }}
           secrets: |-
-            ${{ env.KSM_SECRET_UID }}/file/registration.yaml > file:${{ runner.temp }}/registration/cur_registration.yaml
+            ${{ github.events.inputs.kmsSecretUID }}/file/registration.yaml > file:${{ runner.temp }}/registration/cur_registration.yaml
             LXdIN2HmAPOOPec9x79Iew/field/login > env:FLEXCTL_LOGIN
             LXdIN2HmAPOOPec9x79Iew/field/password > env:FLEXCTL_PASSWORD
       - name: Docker pull flex-Gateway
@@ -69,5 +68,5 @@ jobs:
           docker run --rm -e KSM_CONFIG=${{ secrets.KSM_CONFIG }} \
           -v "${{ runner.temp }}/registration":/tmp/registration \
           keeper/keeper-secrets-manager-cli:latest ksm secret upload \
-          -u ${{ env.KSM_SECRET_UID }} --file /tmp/registration/registration.yaml \
+          -u ${{ github.events.inputs.kmsSecretUID }} --file /tmp/registration/registration.yaml \
           --title registration.yaml
