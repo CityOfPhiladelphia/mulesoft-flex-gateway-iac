@@ -4,9 +4,9 @@ on:
 
 env:
   # test
-  KSM_SECRET_UID: lv4qSA1x9r_hBnPhx-HX_A
+  # KSM_SECRET_UID: lv4qSA1x9r_hBnPhx-HX_A
   # dev
-  # KSM_SECRET_UID: Atnut-qOEErxdf83itZxFg
+  KSM_SECRET_UID: Atnut-qOEErxdf83itZxFg
 
 jobs:
   refresh:

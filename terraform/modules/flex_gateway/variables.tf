@@ -14,6 +14,7 @@ variable "dev_mode" {
 variable "abcd1234" {
   type        = string
   description = "unused variable!"
+  default     = "abcd"
 }
 
 # VPC
