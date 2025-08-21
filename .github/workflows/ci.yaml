@@ -63,18 +63,7 @@ jobs:
           # https://github.com/terraform-linters/tflint/blob/master/docs/user-guide/plugins.md#avoiding-rate-limiting
           GITHUB_TOKEN: ${{ github.token }}
 
-      - name: Run TFLint on module
+      - name: Run TFLint recursively
         run: |
           cd $TF_DIR
-          cd modules/flex_gateway
-          tflint -f compact
-      - name: Run TFLint on test
-        run: |
-          cd $TF_DIR
-          cd env/test
-          tflint -f compact
-      - name: Run TFLint on dev
-        run: |
-          cd $TF_DIR
-          cd env/dev
-          tflint -f compact
+          tflint --recursive -f compact
