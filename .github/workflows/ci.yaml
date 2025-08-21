@@ -5,26 +5,27 @@ env:
   TF_DIR: "./terraform"
 
 jobs:
-  truflehog:
-    runs-on: self-hosted
-    container: buildpack-deps:bookworm
-    steps:
-      - name: Install requirements
-        run: |
-          export DEBIAN_FRONTEND=noninteractive
-          apt-get update
-          apt-get install -y jq
-      - name: Checkout code
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-      - name: Avoid dubious ownership error
-        run: |
-          git config --global --add safe.directory '*'
-      - name: Secret Scanning
-        uses: trufflesecurity/trufflehog@main
-        with:
-          extra_args: --results=verified,unknown
+  # I think we need actions runner to get this working
+  #truflehog:
+  #  runs-on: self-hosted
+  #  container: buildpack-deps:bookworm
+  #  steps:
+  #    - name: Install requirements
+  #      run: |
+  #        export DEBIAN_FRONTEND=noninteractive
+  #        apt-get update
+  #        apt-get install -y jq
+  #    - name: Checkout code
+  #      uses: actions/checkout@v4
+  #      with:
+  #        fetch-depth: 0
+  #    - name: Avoid dubious ownership error
+  #      run: |
+  #        git config --global --add safe.directory '*'
+  #    - name: Secret Scanning
+  #      uses: trufflesecurity/trufflehog@main
+  #      with:
+  #        extra_args: --results=verified,unknown
   tflint:
     runs-on: self-hosted
     container: buildpack-deps:bookworm

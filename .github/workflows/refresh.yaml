@@ -2,9 +2,20 @@ name: Refresh Flex Gateway Cert
 on:
   push:
 
+env:
+  # test
+  KSM_SECRET_UID: lv4qSA1x9r_hBnPhx-HX_A
+  # dev
+  # KSM_SECRET_UID: Atnut-qOEErxdf83itZxFg
+
 jobs:
   refresh:
     runs-on: self-hosted
+    # NO matrix until ARC
+    #strategy:
+    #  matrix:
+    #    # Test, Dev
+    #    KSM_SECRET_UID: [lv4qSA1x9r_hBnPhx-HX_A, Atnut-qOEErxdf83itZxFg]
 
     steps:
       # THIS STEP IS ONLY NECESSARY BECAUSE WE DON'T USE ACTIONS RUNNER CONTROLER,
@@ -21,7 +32,7 @@ jobs:
         with:
           keeper-secret-config: ${{ secrets.KSM_CONFIG }}
           secrets: |-
-            KOvpmbsoepm69o3k7iAcVQ/file/registration.yaml > file:${{ runner.temp }}/registration/cur_registration.yaml
+            {{ env.KSM_SECRET_UID }}/file/registration.yaml > file:${{ runner.temp }}/registration/cur_registration.yaml
             LXdIN2HmAPOOPec9x79Iew/field/login > env:FLEXCTL_LOGIN
             LXdIN2HmAPOOPec9x79Iew/field/password > env:FLEXCTL_PASSWORD
       - name: Docker pull flex-Gateway
@@ -58,5 +69,5 @@ jobs:
           docker run --rm -e KSM_CONFIG=${{ secrets.KSM_CONFIG }} \
           -v "${{ runner.temp }}/registration":/tmp/registration \
           keeper/keeper-secrets-manager-cli:latest ksm secret upload \
-          -u KOvpmbsoepm69o3k7iAcVQ --file /tmp/registration/registration.yaml \
+          -u {{ env.KSM_SECRET_UID }} --file /tmp/registration/registration.yaml \
           --title registration.yaml
