@@ -1,6 +1,6 @@
 name: Refresh Flex Gateway Cert
 on:
-  workflow_dispatch:
+  push:
 
 jobs:
   get_cert:
