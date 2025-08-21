@@ -10,14 +10,14 @@ jobs:
     steps:
       - name: Create registration directory
         run: |
-          mkdir /tmp/fg_cfg
+          mkdir /tmp/registration
       - name: Retrieve secrets from Keeper
         id: ksecrets
         uses: Keeper-Security/ksm-action@master
         with:
           keeper-secret-config: ${{ secrets.KSM_CONFIG }}
           secrets: |-
-            lv4qSA1x9r_hBnPhx-HX_A/file/mulesoft_test_reg.yml > file:/tmp/fg_cfg/registration.yaml
+            lv4qSA1x9r_hBnPhx-HX_A/file/mulesoft_test_reg.yml > file:/tmp/registration/cur_registration.yaml
             LXdIN2HmAPOOPec9x79Iew/field/login > env:FLEXCTL_LOGIN
             LXdIN2HmAPOOPec9x79Iew/field/password > env:FLEXCTL_PASSWORD
       - name: Docker pull flex-Gateway
@@ -26,5 +26,5 @@ jobs:
       - name: Check registration
         run: |
           docker run --entrypoint flexctl \
-          -v "/tmp/fg_cfg":/registration mulesoft/flex-gateway \
-          registration inspect
+          -v "/tmp/registration":/usr/local/share/mulesoft/flex-gateway/conf.d mulesoft/flex-gateway \
+          registration inspect -f /tmp/registration/cur_registration.yaml
