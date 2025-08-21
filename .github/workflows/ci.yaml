@@ -1,10 +1,22 @@
-name: Lint
+name: CI
 on: [push, pull_request]
 
 env:
   TF_DIR: "./terraform"
 
 jobs:
+  truflehog:
+    runs-on: self-hosted
+    container: buildpack-deps:bookworm
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Secret Scanning
+        uses: trufflesecurity/trufflehog@main
+        with:
+          extra_args: --results=verified,unknown
   tflint:
     runs-on: self-hosted
     container: buildpack-deps:bookworm
