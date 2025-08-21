@@ -27,19 +27,36 @@ jobs:
       - name: Docker pull flex-Gateway
         run: |
           docker pull mulesoft/flex-gateway:latest
-      - name: Check registration
+      - name: Check current registration
         run: |
           docker run --rm --entrypoint flexctl \
           -v "${{ runner.temp }}/registration":/tmp/registration mulesoft/flex-gateway \
           registration inspect -f /tmp/registration/cur_registration.yaml
+      - name: Renew registration
+        run: |
+          docker run --rm --entrypoint flexctl \
+          -u $UID -v "${{ runner.temp }}/registration":/tmp/registration
+          mulesoft/flex-gateway \
+          registration renew \
+          --client-id=$FLEXCTL_LOGIN \
+          --client-secret=$FLEXCTL_PASSWORD \
+          --output-directory=/tmp/registration \
+          /tmp/registration/cur_registration.yaml
+      - name: List temp dir
+        run: |
+          ls ${{ runner.temp }}
+      - name: Check new registration
+        run: |
+          docker run --rm --entrypoint flexctl \
+          -v "${{ runner.temp }}/registration":/tmp/registration mulesoft/flex-gateway \
+          registration inspect -f /tmp/registration/registration.yaml
       - name: Docker pull keeper
         run: |
           docker pull keeper/keeper-secrets-manager-cli:latest
-      - name: Test upload to Keeper
+      - name: Upload new cert to Keeper
         run: |
-          echo "bogus2" > ${{ runner.temp }}/registration/temp.txt
           docker run --rm -e KSM_CONFIG=${{ secrets.KSM_CONFIG }} \
           -v "${{ runner.temp }}/registration":/tmp/registration \
           keeper/keeper-secrets-manager-cli:latest ksm secret upload \
-          -u KOvpmbsoepm69o3k7iAcVQ --file /tmp/registration/temp.txt \
+          -u KOvpmbsoepm69o3k7iAcVQ --file /tmp/registration/registration.yaml \
           --title registration.yaml
