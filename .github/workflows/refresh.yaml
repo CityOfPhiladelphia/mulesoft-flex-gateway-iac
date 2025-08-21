@@ -7,6 +7,18 @@ on:
         required: true
         default: "lv4qSA1x9r_hBnPhx-HX_A"
 
+###
+# This job:
+#   * Downloads the current registration.yaml from for the given environment from Keeper
+#   * Retrieves the flexctl client id and client secret from Keeper
+#   * Renews the certificate
+#   * Replaces* the record in keeper
+#
+# * for some annoying reason, you can't delete previously uploaded files with KSM client
+#   so technically the previous cert isn't actually deleted. But, both TF and this script
+#   automatically select the most recent one so it's not such a big deal.
+####
+
 jobs:
   refresh:
     runs-on: self-hosted
