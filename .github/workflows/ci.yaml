@@ -8,10 +8,6 @@ jobs:
   tflint:
     runs-on: self-hosted
 
-    strategy:
-      matrix:
-        os: [ubuntu-latest, macos-latest, windows-latest]
-
     steps:
       - uses: actions/checkout@v4
         name: Checkout source code
