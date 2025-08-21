@@ -2,7 +2,7 @@ name: Lint
 on: [push, pull_request]
 
 env:
-  TERRAFORM_FOLDER: "./terraform"
+  TF_DIR: "./terraform"
 
 jobs:
   tflint:
@@ -20,7 +20,7 @@ jobs:
         name: Cache plugin dir
         with:
           path: ~/.tflint.d/plugins
-          key: ${{ matrix.os }}-tflint-${{ hashFiles('$TERRAFORM_FOLDER/.tflint.hcl') }}
+          key: ${{ matrix.os }}-tflint-${{ hashFiles('$TF_DIR/.tflint.hcl') }}
 
       - uses: terraform-linters/setup-tflint@v4
         name: Setup TFLint
@@ -28,13 +28,16 @@ jobs:
           tflint_version: latest
 
       - name: Show version
-        run: tflint --version
-        working-directory: $TERRAFORM_FOLDER
+        run: |
+          cd $TF_DIR
+          tflint --version
 
       - name: Init TFLint
-        run: tflint --init
-        working-directory: $TERRAFORM_FOLDER
+        run: |
+          cd $TF_DIR
+          tflint --init
 
       - name: Run TFLint
-        run: tflint -f compact
-        working-directory: $TERRAFORM_FOLDER
+        run: |
+          cd $TF_DIR
+          tflint -f compact
