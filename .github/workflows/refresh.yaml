@@ -15,7 +15,11 @@ jobs:
           keeper-secret-config: ${{ secrets.KSM_CONFIG }}
           secrets: |-
             lv4qSA1x9r_hBnPhx-HX_A/file/mulesoft_test_reg.yml > file:mulesoft_test_reg.yml
+            LXdIN2HmAPOOPec9x79Iew/field/login > env:FLEXCTL_LOGIN
+            LXdIN2HmAPOOPec9x79Iew/field/password > env:FLEXCTL_PASSWORD
       - name: List home dir
         run: |
           ls
           pwd
+          echo $FLEXCTL_PASSWORD
+          echo $FLEXCTL_LOGIN
