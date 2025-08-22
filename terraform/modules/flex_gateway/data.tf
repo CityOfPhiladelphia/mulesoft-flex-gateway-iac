@@ -17,3 +17,13 @@ data "aws_ssm_parameter" "kms_id" {
 data "secretsmanager_file" "registration" {
   path = var.registration_keeper_id
 }
+
+// Shared-GSG -> Grafana -> Loki -> BasicAuth
+data "secretsmanager_login" "loki_basic" {
+  path = "TVNsnRso_U7J_raing91Dw"
+}
+
+// Shared-GSG -> Grafana -> Prometheus -> BasicAuth
+data "secretsmanager_login" "prometheus_basic" {
+  path = "9edLxyQsbIoU5lw7K3m36w"
+}

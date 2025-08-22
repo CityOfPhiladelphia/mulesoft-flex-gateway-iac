@@ -54,7 +54,7 @@ scrape_interval = "15s"
   // Use the targets with labels from the discovery.relabel component
   targets    = discovery.relabel.integrations_node_exporter.output
   // Send the scraped metrics to the relabeling component
-  forward_to = [prometheus.remote_write.local.receiver]
+  forward_to = [prometheus.remote_write.prod.receiver]
 }
 
 // Host Cadvisor on the Docker socket to expose container metrics.
@@ -67,16 +67,22 @@ prometheus.exporter.cadvisor "example" {
 // Configure a prometheus.scrape component to collect cadvisor metrics.
 prometheus.scrape "scraper" {
   targets    = prometheus.exporter.cadvisor.example.targets
-  forward_to = [ prometheus.remote_write.local.receiver ]
+  forward_to = [ prometheus.remote_write.prod.receiver ]
 
 
   scrape_interval = "10s"
 }
 
 // Configure a prometheus.remote_write component to send metrics to a Prometheus server.
-prometheus.remote_write "local" {
+prometheus.remote_write "prod" {
   endpoint {
-    url = "http://10.30.80.106:9090/api/v1/write"
+    // Replace this with the real prod DNS
+    url = "http://internal-grafana-prd-1260996886.us-east-1.elb.amazonaws.com:9090/api/v1/write"
+
+    basic_auth {
+      username = sys.env("PROMETHEUS_USER")
+      password = sys.env("PROMETHEUS_PASSWORD")
+    }
   }
 }
 
@@ -95,7 +101,7 @@ loki.source.journal "logs_integrations_integrations_node_exporter_journal_scrape
   // Apply relabeling rules to the logs
   relabel_rules = discovery.relabel.logs_integrations_integrations_node_exporter_journal_scrape.rules
   // Send logs to the local Loki instance
-  forward_to    = [loki.write.local.receiver]
+  forward_to    = [loki.write.prod.receiver]
 }
 
 local.file_match "logs_integrations_integrations_node_exporter_direct_scrape" {
@@ -163,7 +169,7 @@ loki.source.file "logs_integrations_integrations_node_exporter_direct_scrape" {
   // Use targets defined in local.file_match
   targets    = local.file_match.logs_integrations_integrations_node_exporter_direct_scrape.targets
   // Send logs to the local Loki instance
-  forward_to = [loki.write.local.receiver]
+  forward_to = [loki.write.prod.receiver]
 }
 
 // Configure a loki.source.docker component to collect logs from Docker containers.
@@ -172,7 +178,7 @@ loki.source.docker "default" {
   targets    = discovery.docker.linux.targets
   labels     = {"platform" = "docker"}
   relabel_rules = discovery.relabel.logs_integrations_docker.rules
-  // forward_to = [loki.write.local.receiver]
+  // forward_to = [loki.write.prod.receiver]
   forward_to = [loki.process.fluentbit.receiver]
 }
 
@@ -245,13 +251,18 @@ loki.process "fluentbit" {
     }
   }
 
-  forward_to = [loki.write.local.receiver]
+  forward_to = [loki.write.prod.receiver]
 }
 
-loki.write "local" {
+loki.write "prod" {
   endpoint {
-    // TODO: Update this
-    url = "http://10.30.80.106:3100/loki/api/v1/push"
+    // TODO: Update this to real prod dns
+    url = "http://internal-grafana-prd-1260996886.us-east-1.elb.amazonaws.com:3100/loki/api/v1/push"
+
+    basic_auth {
+      username = sys.env("LOKI_USER")
+      password = sys.env("LOKI_PASSWORD")
+    }
   }
 }
 
