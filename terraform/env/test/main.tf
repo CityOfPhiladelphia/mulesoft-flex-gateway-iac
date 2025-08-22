@@ -27,7 +27,6 @@ provider "aws" {
 }
 
 provider "secretsmanager" {
-  credential = file("~/client-config.json")
 }
 
 module "flex_gateway" {

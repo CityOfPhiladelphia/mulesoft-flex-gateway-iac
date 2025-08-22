@@ -1,13 +1,14 @@
 name: CD
 on: [push, pull_request]
 
-env:
-  TF_DIR: "./terraform"
-
 jobs:
   tfplan:
     runs-on: self-hosted
     container: buildpack-deps:bookworm
+
+    strategy:
+      matrix:
+        TF_DIR: [./terraform/env/test, ./terraform/env/dev]
 
     steps:
       - name: Retrieve secrets from Keeper
@@ -28,9 +29,11 @@ jobs:
           cli_config_credentials_token: ${{ env.TF_TOKEN }}
       - name: Terraform Init
         run: |
-          cd $TF_DIR/env/test
+          cd $TF_DIR
           terraform init
       - name: Terraform Plan
         run: |
-          cd $TF_DIR/env/test
+          cd $TF_DIR
           terraform plan
+        env:
+          KEEPER_CREDENTIAL: ${{ secrets.KSM_CONFIG }}
