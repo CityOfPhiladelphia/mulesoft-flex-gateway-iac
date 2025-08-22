@@ -17,6 +17,11 @@ jobs:
           keeper-secret-config: ${{ secrets.KSM_CONFIG }}
           secrets: |-
             sd33hj2cVYiRB4TEhAG_jg/field/password > env:TF_TOKEN
+      - name: Setup Nodejs
+        uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+          check-latest: true
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
         with:
