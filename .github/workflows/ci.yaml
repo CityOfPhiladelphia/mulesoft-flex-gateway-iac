@@ -44,7 +44,7 @@ jobs:
       - name: Terraform Format
         run: |
           cd $TF_DIR
-          terraform format -recursive -check .
+          terraform fmt -recursive -check .
 
   tflint:
     runs-on: self-hosted
