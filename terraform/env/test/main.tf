@@ -1,6 +1,14 @@
 terraform {
   required_version = "~> 1.12"
 
+  cloud {
+    organization = "Philadelphia"
+
+    workspaces {
+      name = "mulesoft-flex-gateway-test"
+    }
+  }
+
   required_providers {
     aws = {
       source  = "hashicorp/aws"
