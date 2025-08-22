@@ -29,11 +29,11 @@ jobs:
           cli_config_credentials_token: ${{ env.TF_TOKEN }}
       - name: Terraform Init
         run: |
-          cd $TF_DIR
+          cd ${{ matrix.TF_DIR }}
           terraform init
       - name: Terraform Plan
         run: |
-          cd $TF_DIR
+          cd ${{ matrix.TF_DIR }}
           terraform plan
         env:
           KEEPER_CREDENTIAL: ${{ secrets.KSM_CONFIG }}
