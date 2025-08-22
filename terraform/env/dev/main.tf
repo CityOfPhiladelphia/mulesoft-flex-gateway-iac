@@ -1,6 +1,14 @@
 terraform {
   required_version = "~> 1.12"
 
+  cloud {
+    organization = "Philadelphia"
+
+    workspaces {
+      name = "mulesoft-flex-gateway-dev"
+    }
+  }
+
   required_providers {
     aws = {
       source  = "hashicorp/aws"
@@ -14,12 +22,10 @@ terraform {
 }
 
 provider "aws" {
-  region  = "us-east-1"
-  profile = "mulesoft"
+  region = "us-east-1"
 }
 
 provider "secretsmanager" {
-  credential = file("~/client-config.json")
 }
 
 module "flex_gateway" {
