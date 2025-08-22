@@ -25,7 +25,7 @@ jobs:
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
         with:
-          cli_config_credentials_token: $TF_TOKEN
+          cli_config_credentials_token: ${{ env.TF_TOKEN }}
       - name: Terraform Init
         run: |
           cd $TF_DIR/env/test
