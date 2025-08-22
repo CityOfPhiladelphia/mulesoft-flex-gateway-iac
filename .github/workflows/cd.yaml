@@ -16,7 +16,7 @@ jobs:
         with:
           keeper-secret-config: ${{ secrets.KSM_CONFIG }}
           secrets: |-
-            f0SyLtXNtfs11o1_5rI-Ig/field/password > env:TF_TOKEN
+            sd33hj2cVYiRB4TEhAG_jg/field/password > env:TF_TOKEN
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
         with:
@@ -25,3 +25,7 @@ jobs:
         run: |
           cd $TF_DIR/env/test
           terraform init
+      - name: Terraform Plan
+        run: |
+          cd $TF_DIR/env/test
+          terraform plan
