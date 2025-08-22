@@ -41,6 +41,11 @@ variable "ssh_sg_id" {
   type = string
 }
 
+variable "build_branch" {
+  type        = string
+  default     = "main"
+  description = "What git branch to checkout before running the build script. Defaults to `main`."
+}
 # Secrets
 variable "registration_keeper_id" {
   type = string

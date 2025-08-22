@@ -39,6 +39,7 @@ module "flex_gateway" {
   # EC2
   ec2_instance_type = "t3.small"
   ssh_key_name      = "dev-key"
+  build_branch      = "main"
   # non-prod remote SG
   ssh_sg_id = "sg-0014e8d551f6d514b"
   # Shared GSG -> Flex-Gateway -> Dev-Registration
