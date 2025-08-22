@@ -1,0 +1,27 @@
+name: CD
+on: [push, pull_request]
+
+env:
+  TF_DIR: "./terraform"
+
+jobs:
+  tfplan:
+    runs-on: self-hosted
+    container: buildpack-deps:bookworm
+
+    steps:
+      - name: Retrieve secrets from Keeper
+        id: ksecrets
+        uses: Keeper-Security/ksm-action@master
+        with:
+          keeper-secret-config: ${{ secrets.KSM_CONFIG }}
+          secrets: |-
+            f0SyLtXNtfs11o1_5rI-Ig/field/password > env:TF_TOKEN
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          cli_config_credentials_token: $TF_TOKEN
+      - name: Terraform Init
+        run: |
+          cd $TF_DIR/env/test
+          terraform init
