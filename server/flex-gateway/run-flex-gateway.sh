@@ -14,5 +14,6 @@ docker run \
   --name flex-gateway \
   -v "$(pwd)/conf":/usr/local/share/mulesoft/flex-gateway/conf.d \
   -v "$(pwd)/logs":/usr/local/share/mulesoft/flex-gateway/logs \
+  -e FLEX_DATASOURCE_CONTROL_NODE_ENABLED=true \
   -p 8081:8081 \
   mulesoft/flex-gateway
