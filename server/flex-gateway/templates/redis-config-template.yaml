@@ -8,4 +8,4 @@ spec:
     redis:
       address: $REDIS_ADDRESS:6379
       password: $REDIS_PW
-
+      tls: {}
