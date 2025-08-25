@@ -18,6 +18,11 @@ data "secretsmanager_file" "registration" {
   path = var.registration_keeper_id
 }
 
+// Shared-GSG -> Flex-Gateway -> Redis
+data "secretsmanager_login" "redis" {
+  path = "8F2CC6bDetXZlOm0Trrs8A"
+}
+
 // Shared-GSG -> Grafana -> Loki -> BasicAuth
 data "secretsmanager_login" "loki_basic" {
   path = "TVNsnRso_U7J_raing91Dw"

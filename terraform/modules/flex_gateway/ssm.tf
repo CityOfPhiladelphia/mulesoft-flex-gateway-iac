@@ -10,6 +10,19 @@ resource "aws_ssm_parameter" "registration_s3_key" {
   type  = "String"
 }
 
+resource "aws_ssm_parameter" "redis_endpoint" {
+  name  = "/${var.app_name}/${var.env_name}/redis_endpoint"
+  value = aws_elasticache_replication_group.main.primary_endpoint_address
+  type  = "String"
+}
+
+resource "aws_ssm_parameter" "redis_pw" {
+  name   = "/${var.app_name}/${var.env_name}/redis_pw"
+  value  = data.secretsmanager_login.redis.password
+  type   = "SecureString"
+  key_id = data.aws_ssm_parameter.kms_id.value
+}
+
 resource "aws_ssm_parameter" "loki_pw" {
   name   = "/${var.app_name}/${var.env_name}/loki_pw"
   value  = data.secretsmanager_login.loki_basic.password

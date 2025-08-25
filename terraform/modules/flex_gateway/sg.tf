@@ -72,3 +72,23 @@ resource "aws_vpc_security_group_egress_rule" "alb_outbound_all_to_ec2" {
   ip_protocol                  = "-1"
   referenced_security_group_id = aws_security_group.ec2.id
 }
+
+// Redis security group
+resource "aws_security_group" "redis" {
+  name        = "${var.app_name}-${var.env_name}-redis"
+  description = "SG for Elasticache Redis"
+  vpc_id      = var.vpc_id
+
+  tags = merge(local.default_tags, { Name = "${var.app_name}-${var.env_name}-redis" })
+}
+
+resource "aws_vpc_security_group_ingress_rule" "redis_inbound_redis_from_ec2" {
+  security_group_id = aws_security_group.redis.id
+  description       = "Inbound REDIS access from EC2"
+
+  ip_protocol                  = "tcp"
+  from_port                    = 6379
+  to_port                      = 6379
+  referenced_security_group_id = aws_security_group.ec2.id
+}
+
