@@ -38,7 +38,7 @@ jobs:
         run: |
           cd ${{ matrix.TF_DIR }}
           terraform init
-      - name: Terraform Plan
+      - name: Terraform Apply
         run: |
           cd ${{ matrix.TF_DIR }}
           terraform apply -auto-approve
