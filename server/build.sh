@@ -21,7 +21,7 @@ export S3_NAME=$(aws ssm get-parameter --name "/$APP_NAME/$ENV_NAME/s3_name" --q
 export REGISTRATION_S3_KEY=$(aws ssm get-parameter --name "/$APP_NAME/$ENV_NAME/registration_s3_key" --query "Parameter.Value" --output text)
 aws s3 cp s3://$S3_NAME/$REGISTRATION_S3_KEY flex-gateway/conf/registration.yaml
 # Set up redis file
-export REDDIS_ADDRESS=$(aws ssm get-parameter --name "/$APP_NAME/$ENV_NAME/redis_endpoint" --query "Parameter.Value" --output text)
+export REDIS_ADDRESS=$(aws ssm get-parameter --name "/$APP_NAME/$ENV_NAME/redis_endpoint" --query "Parameter.Value" --output text)
 export REDIS_PW=$(aws ssm get-parameter --name "/$APP_NAME/$ENV_NAME/redis_pw" --with-decryption --query "Parameter.Value" --output text)
 envsubst <flex-gateway/templates/redis-config-template.yaml >flex-gateway/conf/redis-config.yaml
 # Run all these commands as ec2-user (required because it establishes new docker group)
