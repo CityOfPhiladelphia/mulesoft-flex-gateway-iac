@@ -1,0 +1,11 @@
+# Docs on redis configuration https://docs.mulesoft.com/gateway/latest/flex-conn-shared-storage-config#docker
+apiVersion: gateway.mulesoft.com/v1alpha1
+kind: Configuration
+metadata:
+  name: shared-storage-redis
+spec:
+  sharedStorage:
+    redis:
+      address: $REDIS_ADDRESS:6379
+      password: $REDIS_PW
+

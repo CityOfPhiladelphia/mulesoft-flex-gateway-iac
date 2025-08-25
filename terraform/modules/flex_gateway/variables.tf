@@ -24,8 +24,25 @@ variable "asg_subnet_ids" {
   type = list(string)
 }
 
+variable "redis_subnet_ids" {
+  type = list(string)
+}
+
 variable "acm_cert_arn" {
   type = string
+}
+
+# Elasticache
+variable "redis_instance_type" {
+  type = string
+}
+
+variable "redis_engine_version" {
+  type = string
+}
+
+variable "redis_num_cache_clusters" {
+  type = number
 }
 
 # EC2

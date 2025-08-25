@@ -41,11 +41,16 @@ module "flex_gateway" {
   # Non-prod subnet public zone A then B
   alb_subnet_ids = ["subnet-021a798c801a6de15", "subnet-04befa32beadb1606"]
   # Non-prod subnet private zone A then B
-  asg_subnet_ids = ["subnet-0ff7f0642b438fbeb", "subnet-0d5478758a826841e"]
+  asg_subnet_ids   = ["subnet-0ff7f0642b438fbeb", "subnet-0d5478758a826841e"]
+  redis_subnet_ids = ["subnet-0ff7f0642b438fbeb", "subnet-0d5478758a826841e"]
+  # Redis
+  redis_engine_version     = "8.1"
+  redis_instance_type      = "cache.t4g.micro"
+  redis_num_cache_clusters = 2
   # EC2
   ec2_instance_type = "t3.small"
   ssh_key_name      = "dev-key"
-  build_branch      = "main"
+  build_branch      = "add-redis"
   # non-prod remote SG
   ssh_sg_id = "sg-0014e8d551f6d514b"
   # Shared GSG -> Flex-Gateway -> Test-Registration
