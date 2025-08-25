@@ -5,7 +5,7 @@ terraform {
     organization = "Philadelphia"
 
     workspaces {
-      name = "mulesoft-flex-gateway-dev"
+      name = "mulesoft-flex-gateway-prod"
     }
   }
 
