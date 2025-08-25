@@ -46,11 +46,11 @@ module "flex_gateway" {
   # Redis
   redis_engine_version     = "8.1"
   redis_instance_type      = "cache.t4g.micro"
-  redis_num_cache_clusters = 2
+  redis_num_cache_clusters = 1
   # EC2
   ec2_instance_type = "t3.small"
   ssh_key_name      = "dev-key"
-  build_branch      = "add-redis"
+  build_branch      = "main"
   # non-prod remote SG
   ssh_sg_id = "sg-0014e8d551f6d514b"
   # Shared GSG -> Flex-Gateway -> Test-Registration
