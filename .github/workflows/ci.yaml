@@ -93,7 +93,8 @@ jobs:
 
     strategy:
       matrix:
-        TF_DIR: [./terraform/env/test, ./terraform/env/dev]
+        TF_DIR:
+          [./terraform/env/test, ./terraform/env/dev, ./terraform/env/prod]
 
     steps:
       - uses: actions/checkout@v4
