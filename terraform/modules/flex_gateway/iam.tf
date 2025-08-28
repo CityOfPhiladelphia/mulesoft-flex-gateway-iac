@@ -103,6 +103,7 @@ resource "aws_iam_role_policy_attachments_exclusive" "ec2" {
   policy_arns = [
     aws_iam_policy.kms.arn,
     aws_iam_policy.s3.arn,
-    aws_iam_policy.ssm.arn
+    aws_iam_policy.ssm.arn,
+    "arn:aws:iam::aws:policy/CloudWatchLogsFullAccess"
   ]
 }
