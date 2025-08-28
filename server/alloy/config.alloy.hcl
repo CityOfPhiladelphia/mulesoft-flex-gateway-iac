@@ -76,8 +76,7 @@ prometheus.scrape "scraper" {
 // Configure a prometheus.remote_write component to send metrics to a Prometheus server.
 prometheus.remote_write "prod" {
   endpoint {
-    // Replace this with the real prod DNS
-    url = "http://internal-grafana-prd-1260996886.us-east-1.elb.amazonaws.com:9090/api/v1/write"
+    url = "https://citygeo-grafana.phila.gov:3100/loki/api/v1/push"
 
     basic_auth {
       username = sys.env("PROMETHEUS_USER")
@@ -256,8 +255,7 @@ loki.process "fluentbit" {
 
 loki.write "prod" {
   endpoint {
-    // TODO: Update this to real prod dns
-    url = "http://internal-grafana-prd-1260996886.us-east-1.elb.amazonaws.com:3100/loki/api/v1/push"
+    url = "https://citygeo-grafana.phila.gov:3100/loki/api/v1/push"
 
     basic_auth {
       username = sys.env("LOKI_USER")
