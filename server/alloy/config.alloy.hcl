@@ -197,8 +197,8 @@ loki.process "fluentbit" {
   stage.static_labels {
     values = {
       alloy_cfg_v = "1",
-      app_name = sys.env("APP_NAME")
-      env_name = sys.env("ENV_NAME")
+      app_name = sys.env("APP_NAME"),
+      env_name = sys.env("ENV_NAME"),
     }
   }
 
