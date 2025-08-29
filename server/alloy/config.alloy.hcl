@@ -15,6 +15,18 @@ discovery.relabel "integrations_node_exporter" {
   }
 
   rule {
+    // Set the app name
+    target_label = "app_name"
+    replacement = sys.env("APP_NAME")
+  }
+
+  rule {
+    // Set the env name
+    target_label = "env_name"
+    replacement = sys.env("ENV_NAME")
+  }
+
+  rule {
     // Set a standard job name for all node_exporter metrics
     target_label = "job"
     replacement = "integrations/node_exporter"
@@ -185,6 +197,8 @@ loki.process "fluentbit" {
   stage.static_labels {
     values = {
       alloy_cfg_v = "1",
+      app_name = sys.env("APP_NAME")
+      env_name = sys.env("ENV_NAME")
     }
   }
 
