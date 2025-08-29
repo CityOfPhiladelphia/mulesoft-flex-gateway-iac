@@ -10,11 +10,21 @@ spec:
         type: stdout
         parameters:
           format: json_lines
+      - name: cloudwatch
+        type: cloudwatch_logs
+        parameters:
+          region: us-east-1
+          log_group_name: /mulesoft/flex-$ENV_NAME/
+          log_stream_name: flex-gateway-$ENV_NAME.log
+          log_format: json
+          log_key: message
 
     runtimeLogs:
       logLevel: info
       outputs:
         - stdout
+        - cloudwatch
     accessLogs:
       outputs:
         - stdout
+        - cloudwatch

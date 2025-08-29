@@ -231,6 +231,7 @@ loki.process "fluentbit" {
           envId = "",
           orgId = "",
           method = "",
+          timing = "",
         }
       }
 
@@ -241,6 +242,7 @@ loki.process "fluentbit" {
           orgId = "",
           method = "",
           statuscode = "",
+          timing = "",
         }
       }
 
