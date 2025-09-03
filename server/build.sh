@@ -32,6 +32,8 @@ export FLEX_GATEWAY_VERSION=$(aws ssm get-parameter --name "/$APP_NAME/$ENV_NAME
 sudo -u ec2-user --preserve-env=APP_NAME,ENV_NAME,FLEX_GATEWAY_VERSION -i <<'EOF'
 cd ~/mulesoft-iac/server/flex-gateway
 docker pull mulesoft/flex-gateway:$FLEX_GATEWAY_VERSION
+# We tag it locally as "latest" so that when we do `docker run` it doesnt try to download it again
+docker tag mulesoft/flex-gateway:$FLEX_GATEWAY_VERSION mulesoft/flex-gateway:latest
 bash run-flex-gateway.sh
 EOF
 
