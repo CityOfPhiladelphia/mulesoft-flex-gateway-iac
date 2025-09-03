@@ -4,6 +4,12 @@ resource "aws_ssm_parameter" "s3_name" {
   type  = "String"
 }
 
+resource "aws_ssm_parameter" "flex_gateway_version" {
+  name  = "/${var.app_name}/${var.env_name}/flex_gateway_version"
+  value = var.flex_gateway_version
+  type  = "String"
+}
+
 resource "aws_ssm_parameter" "registration_s3_key" {
   name  = "/${var.app_name}/${var.env_name}/registration_s3_key"
   value = aws_s3_object.registration.key
