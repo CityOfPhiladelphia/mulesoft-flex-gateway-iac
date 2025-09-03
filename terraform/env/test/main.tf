@@ -31,9 +31,10 @@ provider "secretsmanager" {
 module "flex_gateway" {
   source = "../../modules/flex_gateway"
 
-  env_name = "test"
-  app_name = "flex-gateway"
-  dev_mode = true
+  env_name             = "test"
+  app_name             = "flex-gateway"
+  dev_mode             = true
+  flex_gateway_version = "1.10.1"
   # *.phila.gov
   acm_cert_arn = "arn:aws:acm:us-east-1:975050025792:certificate/dc0c25c0-84e6-45aa-90b5-590f8bd8296c"
   # Non-prod vpc
@@ -50,7 +51,7 @@ module "flex_gateway" {
   # EC2
   ec2_instance_type = "t3.small"
   ssh_key_name      = "dev-key"
-  build_branch      = "main"
+  build_branch      = "version-pin-flex-gateway"
   # non-prod remote SG
   ssh_sg_id = "sg-0014e8d551f6d514b"
   # Shared GSG -> Flex-Gateway -> Test-Registration
