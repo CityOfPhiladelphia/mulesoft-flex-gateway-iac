@@ -3,7 +3,7 @@ export ENV_NAME=$2
 # Set hostname to `app-env-{old hostname}`
 sudo hostnamectl hostname "${APP_NAME}-${ENV_NAME}-$(hostnamectl hostname)"
 # Make sure we are in the "server" folder
-cd ~/mulesoft-iac/server
+cd ~/mulesoft-flex-gateway-iac/server
 # This script is to be run as ec2-user, not as root
 # Install docker, nginx, and cronie
 sudo dnf install -y docker nginx cronie
@@ -30,7 +30,7 @@ envsubst <flex-gateway/templates/logs-config-template.yaml >flex-gateway/conf/lo
 export FLEX_GATEWAY_VERSION=$(aws ssm get-parameter --name "/$APP_NAME/$ENV_NAME/flex_gateway_version" --query "Parameter.Value" --output text)
 # Run all these commands as ec2-user (required because it establishes new docker group)
 sudo -u ec2-user --preserve-env=APP_NAME,ENV_NAME,FLEX_GATEWAY_VERSION -i <<'EOF'
-cd ~/mulesoft-iac/server/flex-gateway
+cd ~/mulesoft-flex-gateway-iac/server/flex-gateway
 docker pull mulesoft/flex-gateway:$FLEX_GATEWAY_VERSION
 # We tag it locally as "latest" so that when we do `docker run` it doesnt try to download it again
 docker tag mulesoft/flex-gateway:$FLEX_GATEWAY_VERSION mulesoft/flex-gateway:latest
