@@ -117,7 +117,7 @@ prometheus.scrape "scraper" {
 // Configure a prometheus.remote_write component to send metrics to a Prometheus server.
 prometheus.remote_write "prod" {
   endpoint {
-    url = "https://citygeo-grafana.phila.gov:9090/api/v1/write"
+    url = "https://citygeo-grafana.phila.gov:9090/api/v1/push"
 
     basic_auth {
       username = sys.env("PROMETHEUS_USER")
