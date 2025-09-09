@@ -119,6 +119,10 @@ prometheus.remote_write "prod" {
   endpoint {
     url = "https://citygeo-grafana.phila.gov:9090/api/v1/push"
 
+    headers = {
+      "X-Scope-OrgID" = "main",
+    }
+
     basic_auth {
       username = sys.env("PROMETHEUS_USER")
       password = sys.env("PROMETHEUS_PASSWORD")
