@@ -21,6 +21,10 @@ Upon launching an EC2 from the autoscaling group (or directly from the launch te
 
 The [servers/build.sh](servers/build.sh) script is a bit longer, it takes about 3 minutes to run and mostly just involves installing the required tools (mainly Docker), then parameterizes the docker configuration with values from the AWS infrastructure, then starts the docker-compose stack.
 
+#### Health check
+
+Mulesoft Flex-Gateway doesn't have a "normal" healthcheck like `/ready` or `/healthy`, so instead we set up a "fake" nginx web server and minutely run the command `docker exec flex-gateway flexctl probe --check=liveness`, outputting to a file that the nginx web server can read. This nginx server is accessible to the load balancer, which uses a target group to determine health.
+
 ### AWS Infrastructure
 
 AWS infrastructure is deployed with Terraform.
