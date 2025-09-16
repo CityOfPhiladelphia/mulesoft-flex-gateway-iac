@@ -25,7 +25,19 @@ jobs:
   #    - name: Secret Scanning
   #      uses: trufflesecurity/trufflehog@main
   #      with:
+  #
   #        extra_args: --results=verified,unknown
+  shellcheck:
+    runs-on: self-hosted
+    container:
+      image: buildpack-deps:bookworm
+    steps:
+      - uses: actions/checkout@v4
+        name: Checkout source code
+      - name: Install shellcheck
+        run: apt update && apt install shellcheck
+      - name: Run ShellCheck
+        run: shellcheck -e SC2155 server/build.sh
   tffmt:
     runs-on: self-hosted
     container: buildpack-deps:bookworm
