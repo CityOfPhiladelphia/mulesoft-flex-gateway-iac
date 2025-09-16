@@ -1,9 +1,10 @@
+#!/bin/bash
 export APP_NAME=$1
 export ENV_NAME=$2
 # Set hostname to `app-env-{old hostname}`
 sudo hostnamectl hostname "${APP_NAME}-${ENV_NAME}-$(hostnamectl hostname)"
 # Make sure we are in the "server" folder
-cd ~/mulesoft-flex-gateway-iac/server
+cd ~/mulesoft-flex-gateway-iac/server || exit
 # This script is to be run as ec2-user, not as root
 # Install docker, nginx, and cronie
 sudo dnf install -y docker nginx cronie
@@ -19,7 +20,7 @@ sudo systemctl enable crond
 # Copy registration from s3
 export S3_NAME=$(aws ssm get-parameter --name "/$APP_NAME/$ENV_NAME/s3_name" --query "Parameter.Value" --output text)
 export REGISTRATION_S3_KEY=$(aws ssm get-parameter --name "/$APP_NAME/$ENV_NAME/registration_s3_key" --query "Parameter.Value" --output text)
-aws s3 cp s3://$S3_NAME/$REGISTRATION_S3_KEY flex-gateway/conf/registration.yaml
+aws s3 cp "s3://$S3_NAME/$REGISTRATION_S3_KEY" flex-gateway/conf/registration.yaml
 # Set up redis file
 export REDIS_ADDRESS=$(aws ssm get-parameter --name "/$APP_NAME/$ENV_NAME/redis_endpoint" --query "Parameter.Value" --output text)
 export REDIS_PW=$(aws ssm get-parameter --name "/$APP_NAME/$ENV_NAME/redis_pw" --with-decryption --query "Parameter.Value" --output text)
