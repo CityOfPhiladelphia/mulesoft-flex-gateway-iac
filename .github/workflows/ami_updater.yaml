@@ -58,9 +58,9 @@ jobs:
         uses: peter-evans/create-pull-request@v6
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          commit-message: "Automated PR: Update ${{ matrix.TF_ENV }} AMI id"
+          commit-message: "Automated PR: Update ${{ matrix.TF_ENV }} AMI"
           title: "Update ${{ matrix.TF_ENV }} AMI"
-          body: "This PR was created automatically by a GitHub Action."
+          body: "This PR was created automatically by the AMI auto updater Github Action."
           branch: "update-${{ matrix.TF_ENV }}-${{ steps.new_ami.outputs.id }}" # The new branch to create for the PR
           assignees: "Weastie"
           base: "main" # The target branch for the PR
