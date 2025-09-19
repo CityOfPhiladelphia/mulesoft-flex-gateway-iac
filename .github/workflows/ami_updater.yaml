@@ -22,6 +22,8 @@ jobs:
           secrets: |-
             fNW6hNUZMImoX21IaGRcQw/field/login > env:AWS_ACCESS_KEY_ID
             fNW6hNUZMImoX21IaGRcQw/field/password > env:AWS_SECRET_ACCESS_KEY
+            ct0MNUfbMRs3dXCDJpjJUA/custom_field/app_id > env:GH_APP_ID
+            ct0MNUfbMRs3dXCDJpjJUA/field/keyPair[0][privateKey] > env:GH_APP_PRIVATE_KEY
       - name: Install AWSCLI
         run: |
           curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
@@ -53,14 +55,21 @@ jobs:
           echo "# AMI Name: ${{ steps.new_ami.outputs.name }}" > "./terraform/env/${{ matrix.TF_ENV }}/ami.auto.tfvars"
           echo "# AMI Desc: ${{ steps.new_ami.outputs.desc }}" >> "./terraform/env/${{ matrix.TF_ENV }}/ami.auto.tfvars"
           echo "ec2_ami_id = \"${{ steps.new_ami.outputs.id }}\"" >> "./terraform/env/${{ matrix.TF_ENV }}/ami.auto.tfvars"
+      - name: Generate a github token
+        id: generate-gh-app-token
+        uses: actions/create-github-app-token@v2
+        with:
+          app-id: ${{ env.GH_APP_ID }}
+          private-key: ${{ env.GH_APP_PRIVATE_KEY }}
       - name: Create Pull Request
         if: steps.current_ami.outputs.id != steps.new_ami.outputs.id
         uses: peter-evans/create-pull-request@v6
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ steps.generate-gh-app-token.outputs.token }}
           commit-message: "Automated PR: Update ${{ matrix.TF_ENV }} AMI"
           title: "Update ${{ matrix.TF_ENV }} AMI"
           body: "This PR was created automatically by the AMI auto updater Github Action."
           branch: "update-${{ matrix.TF_ENV }}-${{ steps.new_ami.outputs.id }}" # The new branch to create for the PR
-          assignees: "Weastie"
+          # assignees: "Weastie"
+          reviewers: "Weastie"
           base: "main" # The target branch for the PR
