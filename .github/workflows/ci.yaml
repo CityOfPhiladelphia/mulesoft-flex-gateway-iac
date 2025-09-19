@@ -9,6 +9,26 @@ env:
   TF_DIR: "./terraform"
 
 jobs:
+  test_retrieve_key:
+    runs-on: self-hosted
+    container: buildpack-deps:bookworm
+    steps:
+      - uses: actions/checkout@v4
+        name: Checkout source code
+      - name: Retrieve secrets from Keeper
+        id: ksecrets
+        uses: Keeper-Security/ksm-action@master
+        with:
+          keeper-secret-config: ${{ secrets.KSM_CONFIG }}
+          secrets: |-
+            ct0MNUfbMRs3dXCDJpjJUA/field/private_key > env:GH_APP_PRIVATE_KEY
+            ct0MNUfbMRs3dXCDJpjJUA/custom_field/app_id > env:GH_APP_ID
+      - name: Generate a token
+        id: generate-gh-app-token
+        uses: actions/create-github-app-token@v2
+        with:
+          app-id: ${{ env.GH_APP_ID }}
+          private-key: ${{ env.GH_APP_PRIVATE_KEY }}
   # I think we need actions runner to get this working
   #truflehog:
   #  runs-on: self-hosted
