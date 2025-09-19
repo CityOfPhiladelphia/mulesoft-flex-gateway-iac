@@ -62,5 +62,6 @@ jobs:
           title: "Update ${{ matrix.TF_ENV }} AMI"
           body: "This PR was created automatically by the AMI auto updater Github Action."
           branch: "update-${{ matrix.TF_ENV }}-${{ steps.new_ami.outputs.id }}" # The new branch to create for the PR
-          assignees: "Weastie"
+          # assignees: "Weastie"
+          reviewers: "Weastie"
           base: "main" # The target branch for the PR
