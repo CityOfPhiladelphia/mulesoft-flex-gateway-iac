@@ -118,6 +118,6 @@ jobs:
       - name: Terraform Plan
         run: |
           cd ${{ matrix.TF_DIR }}
-          terraform plan
+          terraform plan -lock-timeout=30s
         env:
           KEEPER_CREDENTIAL: ${{ secrets.KSM_CONFIG }}
