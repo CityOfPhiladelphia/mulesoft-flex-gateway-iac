@@ -22,7 +22,7 @@ jobs:
           keeper-secret-config: ${{ secrets.KSM_CONFIG }}
           secrets: |-
             ct0MNUfbMRs3dXCDJpjJUA/custom_field/app_id > env:GH_APP_ID
-            ct0MNUfbMRs3dXCDJpjJUA/field/keyPair[privateKey] > env:GH_APP_PRIVATE_KEY
+            ct0MNUfbMRs3dXCDJpjJUA/field/keyPair[0][privateKey] > env:GH_APP_PRIVATE_KEY
       - name: Generate a token
         id: generate-gh-app-token
         uses: actions/create-github-app-token@v2
