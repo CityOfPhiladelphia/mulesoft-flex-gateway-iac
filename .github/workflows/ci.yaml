@@ -20,46 +20,11 @@ jobs:
       parent_tf_dir: "./terraform"
 
   tflint:
-    runs-on: self-hosted
-    container: buildpack-deps:bookworm
+    uses: CityOfPhiladelphia/citygeo-shared-workflows/.github/workflows/tflint.yaml@main
+    with:
+      parent_tf_dir: "./terraform"
+      github_token: ${{ github.token }}
 
-    steps:
-      - uses: actions/checkout@v4
-        name: Checkout source code
-
-      - name: Calculate tflint config hash
-        id: hash
-        run: |
-          echo "hash=$(sha256sum $TF_DIR/.tflint.hcl | cut -d' ' -f1)" >> $GITHUB_OUTPUT
-
-      - uses: actions/cache@v4
-        name: Cache plugin dir
-        with:
-          path: ~/.tflint.d/plugins
-          key: ${{ matrix.os }}-tflint-${{ steps.hash.outputs.hash }}
-
-      - uses: terraform-linters/setup-tflint@v4
-        name: Setup TFLint
-        with:
-          tflint_version: latest
-
-      - name: Show version
-        run: |
-          cd $TF_DIR
-          tflint --version
-
-      - name: Init TFLint
-        run: |
-          cd $TF_DIR
-          tflint --init
-        env:
-          # https://github.com/terraform-linters/tflint/blob/master/docs/user-guide/plugins.md#avoiding-rate-limiting
-          GITHUB_TOKEN: ${{ github.token }}
-
-      - name: Run TFLint recursively
-        run: |
-          cd $TF_DIR
-          tflint --recursive -f compact
   tfplan:
     runs-on: self-hosted
     container: buildpack-deps:bookworm
