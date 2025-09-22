@@ -14,6 +14,7 @@ jobs:
     with:
       files: "server/build.sh"
       cli_opts: "-e SC2155"
+
   terraform_fmt:
     uses: CityOfPhiladelphia/citygeo-shared-workflows/.github/workflows/terraform_fmt.yaml@main
     with:
