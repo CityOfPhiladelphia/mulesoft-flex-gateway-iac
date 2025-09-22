@@ -14,25 +14,10 @@ jobs:
     with:
       files: "server/build.sh"
       cli_opts: "-e SC2155"
-  tffmt:
-    runs-on: self-hosted
-    container: buildpack-deps:bookworm
-    steps:
-      - uses: actions/checkout@v4
-        name: Checkout source code
-      - name: Setup Nodejs
-        uses: actions/setup-node@v4
-        with:
-          node-version: lts/*
-          check-latest: true
-      - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v3
-        with:
-          cli_config_credentials_token: ${{ env.TF_TOKEN }}
-      - name: Terraform Format
-        run: |
-          cd $TF_DIR
-          terraform fmt -recursive -check .
+  terraform_fmt:
+    uses: CityOfPhiladelphia/citygeo-shared-workflows/.github/workflows/terraform_fmt.yaml@main
+    with:
+      parent_tf_dir: "./terraform"
 
   tflint:
     runs-on: self-hosted
