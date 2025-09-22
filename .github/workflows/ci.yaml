@@ -23,6 +23,7 @@ jobs:
     uses: CityOfPhiladelphia/citygeo-shared-workflows/.github/workflows/tflint.yaml@main
     with:
       parent_tf_dir: "./terraform"
+    secrets:
       github_token: ${{ github.token }}
 
   tfplan:
