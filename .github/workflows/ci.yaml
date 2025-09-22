@@ -10,16 +10,10 @@ env:
 
 jobs:
   shellcheck:
-    runs-on: self-hosted
-    container:
-      image: buildpack-deps:bookworm
-    steps:
-      - uses: actions/checkout@v4
-        name: Checkout source code
-      - name: Install shellcheck
-        run: apt update && apt install shellcheck
-      - name: Run ShellCheck
-        run: shellcheck -e SC2155 server/build.sh
+    uses: CityOfPhiladelphia/citygeo-shared-workflows/.github/workflows/shellcheck.yaml
+    with:
+      files: "server/build.sh"
+      cli_opts: "-e SC2155"
   tffmt:
     runs-on: self-hosted
     container: buildpack-deps:bookworm
