@@ -7,9 +7,16 @@ terraform {
       version = "~> 6.0"
     }
   }
+
+  cloud {
+    organization = "Philadelphia"
+
+    workspaces {
+      name = "mulesoft-flex-gateway-common"
+    }
+  }
 }
 
 provider "aws" {
-  region  = "us-east-1"
-  profile = "mulesoft"
+  region = "us-east-1"
 }
