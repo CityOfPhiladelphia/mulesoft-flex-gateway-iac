@@ -26,4 +26,10 @@ resource "aws_elasticache_replication_group" "main" {
   apply_immediately          = true
 
   tags = local.default_tags
+
+  lifecycle {
+    ignore_changes = [
+      engine_version
+    ]
+  }
 }
