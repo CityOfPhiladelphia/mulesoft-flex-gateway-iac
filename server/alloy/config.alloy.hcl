@@ -51,33 +51,6 @@ prometheus.scrape "integrations_node_exporter" {
   forward_to = [prometheus.remote_write.prod.receiver]
 }
 
-// This block relabels metrics coming from cadvisor to add standard labels
-discovery.relabel "integrations_cadvisor" {
-  targets = prometheus.exporter.cadvisor.example.targets
-
-  rule {
-    // Set a standard job name for all node_exporter metrics
-    target_label = "job"
-    replacement = "integrations/cadvisor"
-  }
-}
-
-// Host Cadvisor on the Docker socket to expose container metrics.
-prometheus.exporter.cadvisor "example" {
-  docker_host = "unix:///var/run/docker.sock"
-
-  storage_duration = "5m"
-}
-
-// Configure a prometheus.scrape component to collect cadvisor metrics.
-prometheus.scrape "scraper" {
-  targets    = discovery.relabel.integrations_cadvisor.output
-  forward_to = [ prometheus.remote_write.prod.receiver ]
-
-
-  scrape_interval = "10s"
-}
-
 // Configure a prometheus.remote_write component to send metrics to a Prometheus server.
 prometheus.remote_write "prod" {
   endpoint {
@@ -105,7 +78,7 @@ prometheus.remote_write "prod" {
       target_label = "instance"
     }
     write_relabel_config {
-      replacement = "2"
+      replacement = "3"
       target_label = "alloy_cfg_v"
     }
   }
@@ -115,11 +88,8 @@ prometheus.remote_write "prod" {
 // #### Logging Configuration ####
 // ###############################
 
-// Discover Docker containers and extract metadata.
-discovery.docker "linux" {
-  host = "unix:///var/run/docker.sock"
-}
 
+// Collect linux syslogs
 loki.source.journal "logs_integrations_integrations_node_exporter_journal_scrape" {
   // Only collect logs from the last 24 hours
   max_age       = "24h0m0s"
@@ -171,6 +141,19 @@ discovery.relabel "logs_integrations_integrations_node_exporter_journal_scrape" 
   }
 }
 
+// Collect logs from files for node_exporter
+loki.source.file "logs_integrations_integrations_node_exporter_direct_scrape" {
+  // Use targets defined in local.file_match
+  targets    = local.file_match.logs_integrations_integrations_node_exporter_direct_scrape.targets
+  // Send logs to the local Loki instance
+  forward_to = [loki.write.prod.receiver]
+}
+
+// Discover Docker containers and extract metadata.
+discovery.docker "linux" {
+  host = "unix:///var/run/docker.sock"
+}
+
 // Define a relabeling rule to create a service name from the container name.
 discovery.relabel "logs_integrations_docker" {
   targets = []
@@ -182,13 +165,6 @@ discovery.relabel "logs_integrations_docker" {
   }
 }
 
-// Collect logs from files for node_exporter
-loki.source.file "logs_integrations_integrations_node_exporter_direct_scrape" {
-  // Use targets defined in local.file_match
-  targets    = local.file_match.logs_integrations_integrations_node_exporter_direct_scrape.targets
-  // Send logs to the local Loki instance
-  forward_to = [loki.write.prod.receiver]
-}
 
 // Configure a loki.source.docker component to collect logs from Docker containers.
 loki.source.docker "default" {
