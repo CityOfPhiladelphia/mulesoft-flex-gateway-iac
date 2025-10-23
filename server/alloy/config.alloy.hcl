@@ -91,23 +91,23 @@ prometheus.remote_write "prod" {
       username = sys.env("PROMETHEUS_USER")
       password = sys.env("PROMETHEUS_PASSWORD")
     }
-  }
 
-  write_relabel_config {
-    replacement = sys.env("APP_NAME")
-    target_label = "app_name"
-  }
-  write_relabel_config {
-    replacement = sys.env("ENV_NAME")
-    target_label = "env_name"
-  }
-  write_relabel_config {
-    replacement = constants.hostname
-    target_label = "instance"
-  }
-  write_relabel_config {
-    replacement = "2"
-    target_label = "alloy_cfg_v"
+    write_relabel_config {
+      replacement = sys.env("APP_NAME")
+      target_label = "app_name"
+    }
+    write_relabel_config {
+      replacement = sys.env("ENV_NAME")
+      target_label = "env_name"
+    }
+    write_relabel_config {
+      replacement = constants.hostname
+      target_label = "instance"
+    }
+    write_relabel_config {
+      replacement = "2"
+      target_label = "alloy_cfg_v"
+    }
   }
 }
 
