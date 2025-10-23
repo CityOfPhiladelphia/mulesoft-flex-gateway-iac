@@ -9,24 +9,6 @@ discovery.relabel "integrations_node_exporter" {
   targets = prometheus.exporter.unix.integrations_node_exporter.targets
 
   rule {
-    // Set the instance label to the hostname of the machine
-    target_label = "instance"
-    replacement  = constants.hostname
-  }
-
-  rule {
-    // Set the app name
-    target_label = "app_name"
-    replacement = sys.env("APP_NAME")
-  }
-
-  rule {
-    // Set the env name
-    target_label = "env_name"
-    replacement = sys.env("ENV_NAME")
-  }
-
-  rule {
     // Set a standard job name for all node_exporter metrics
     target_label = "job"
     replacement = "integrations/node_exporter"
@@ -62,7 +44,7 @@ prometheus.exporter.unix "integrations_node_exporter" {
 
 // Define how to scrape metrics from the node_exporter
 prometheus.scrape "integrations_node_exporter" {
-scrape_interval = "15s"
+  scrape_interval = "15s"
   // Use the targets with labels from the discovery.relabel component
   targets    = discovery.relabel.integrations_node_exporter.output
   // Send the scraped metrics to the relabeling component
@@ -72,24 +54,6 @@ scrape_interval = "15s"
 // This block relabels metrics coming from cadvisor to add standard labels
 discovery.relabel "integrations_cadvisor" {
   targets = prometheus.exporter.cadvisor.example.targets
-
-  rule {
-    // Set the instance label to the hostname of the machine
-    target_label = "instance"
-    replacement  = constants.hostname
-  }
-
-  rule {
-    // Set the app name
-    target_label = "app_name"
-    replacement = sys.env("APP_NAME")
-  }
-
-  rule {
-    // Set the env name
-    target_label = "env_name"
-    replacement = sys.env("ENV_NAME")
-  }
 
   rule {
     // Set a standard job name for all node_exporter metrics
@@ -128,6 +92,23 @@ prometheus.remote_write "prod" {
       password = sys.env("PROMETHEUS_PASSWORD")
     }
   }
+
+  write_relabel_config {
+    replacement = sys.env("APP_NAME")
+    target_label = "app_name"
+  }
+  write_relabel_config {
+    replacement = sys.env("ENV_NAME")
+    target_label = "env_name"
+  }
+  write_relabel_config {
+    replacement = constants.hostname
+    target_label = "instance"
+  }
+  write_relabel_config {
+    replacement = "2"
+    target_label = "alloy_cfg_v"
+  }
 }
 
 // ###############################
@@ -150,8 +131,8 @@ loki.source.journal "logs_integrations_integrations_node_exporter_journal_scrape
 
 local.file_match "logs_integrations_integrations_node_exporter_direct_scrape" {
   path_targets = [{
-    // Target 10.30.80.106 for log collection
-    __address__ = "10.30.80.106",
+    // Target localhost for log collection
+    __address__ = "localhost",
     // Collect standard system logs
     __path__    = "/var/log/{syslog,messages,*.log}",
     // Add instance label with hostname
@@ -199,13 +180,6 @@ discovery.relabel "logs_integrations_docker" {
       regex = "/(.*)"
       target_label = "service_name"
   }
-
-  rule {
-    // Set the instance label to the hostname of the machine
-    target_label = "instance"
-    replacement  = constants.hostname
-  }
-
 }
 
 // Collect logs from files for node_exporter
@@ -227,14 +201,6 @@ loki.source.docker "default" {
 }
 
 loki.process "fluentbit" {
-  stage.static_labels {
-    values = {
-      alloy_cfg_v = "1",
-      app_name = sys.env("APP_NAME"),
-      env_name = sys.env("ENV_NAME"),
-    }
-  }
-
   stage.regex {
     expression = "^\\[(?P<log_type>[^\\]]+)\\] (?P<json>{.*})"
   }
@@ -305,11 +271,21 @@ loki.process "fluentbit" {
 loki.write "prod" {
   endpoint {
     url = "https://citygeo-grafana.phila.gov:3100/loki/api/v1/push"
-
+    tenant_id = ""
     basic_auth {
       username = sys.env("LOKI_USER")
       password = sys.env("LOKI_PASSWORD")
     }
+    min_backoff_period = "500ms"
+    max_backoff_period = "5m"
+    max_backoff_retries = "10"
+  }
+  external_labels = {
+    "app_name" = sys.env("APP_NAME"),
+    "env_name" = sys.env("ENV_NAME"),
+    "instance" = constants.hostname,
+    "node" = constants.hostname,
+    "alloy_cfg_v" = "2",
   }
 }
 
