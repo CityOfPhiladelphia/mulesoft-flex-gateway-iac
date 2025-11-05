@@ -38,7 +38,7 @@ module "flex_gateway" {
   env_name             = "prod"
   app_name             = "flex-gateway"
   dev_mode             = true
-  flex_gateway_version = "1.10.1"
+  flex_gateway_version = "1.10.3"
   # *.phila.gov
   acm_cert_arn = "arn:aws:acm:us-east-1:975050025792:certificate/dc0c25c0-84e6-45aa-90b5-590f8bd8296c"
   # Prod vpc
