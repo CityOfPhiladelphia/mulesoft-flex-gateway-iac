@@ -4,6 +4,9 @@
     "config:best-practices",
     ":dependencyDashboard"
   ],
+  "assignees": [
+    "Weastie"
+  ],
   "ignorePresets": [
     ":ignoreModulesAndTests"
   ]
