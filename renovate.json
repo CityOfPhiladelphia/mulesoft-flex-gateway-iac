@@ -1,13 +1,25 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
-    "config:best-practices",
-    ":dependencyDashboard"
+    "config:best-practices"
+  ],
+  "ignorePresets": [
+    ":ignoreModulesAndTests"
   ],
   "assignees": [
     "Weastie"
   ],
-  "ignorePresets": [
-    ":ignoreModulesAndTests"
+  "terraform": {
+    "pinDigests": true
+  },
+  "packageRules": [
+    {
+      "matchManagers": [
+        "terraform",
+        "terraform-version"
+      ],
+      "rangeStrategy": "pin",
+      "pinDigests": true
+    }
   ]
 }
