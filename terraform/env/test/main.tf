@@ -58,7 +58,7 @@ module "flex_gateway" {
   ec2_instance_type = "t3.small"
   ssh_key_name      = "dev-key"
   # amiFilter=[{"Name":"owner-id","Values":["137112412989"]},{"Name":"name","Values":["al2023-ami-2023*"]},{"Name":"architecture","Values":["x86_64"]},{"Name":"virtualization-type","Values":["hvm"]}]
-  # currentImageName=test123
+  # currentImageName=al2023-ami-2023.9.20251117.1-kernel-6.12-x86_64
   ec2_ami_id   = "ami-0f00d706c4a80fd93"
   build_branch = "main"
   # non-prod remote SG
