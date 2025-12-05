@@ -50,7 +50,7 @@
       ],
       "matchDatasources": [
         "docker",
-        "amazon-machine-image"
+        "aws-machine-image"
       ],
       "commitMessagePrefix": "[dev]",
       "additionalBranchPrefix": "dev-"
@@ -61,7 +61,7 @@
       ],
       "matchDatasources": [
         "docker",
-        "amazon-machine-image"
+        "aws-machine-image"
       ],
       "commitMessagePrefix": "[test]",
       "additionalBranchPrefix": "test-"
@@ -72,7 +72,7 @@
       ],
       "matchDatasources": [
         "docker",
-        "amazon-machine-image"
+        "aws-machine-image"
       ],
       "commitMessagePrefix": "[prod]",
       "additionalBranchPrefix": "prod-"
