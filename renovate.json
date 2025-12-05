@@ -45,6 +45,12 @@
       "pinDigests": true
     },
     {
+      "matchDatasources": [
+        "docker"
+      ],
+      "separateMinorPatch": true
+    },
+    {
       "matchFileNames": [
         "terraform/env/dev/**"
       ],
