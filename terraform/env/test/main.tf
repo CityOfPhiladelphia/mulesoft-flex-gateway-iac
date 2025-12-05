@@ -33,10 +33,6 @@ provider "aws" {
 provider "secretsmanager" {
 }
 
-variable "ec2_ami_id" {
-  type = string
-}
-
 module "flex_gateway" {
   source = "../../modules/flex_gateway"
 
