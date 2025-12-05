@@ -12,6 +12,29 @@
   "terraform": {
     "pinDigests": true
   },
+  "customManagers": [
+    {
+      "customType": "regex",
+      "managerFilePatterns": [
+        "/.+\\.tf$/"
+      ],
+      "matchStrings": [
+        "#\\s*renovate: datasource=(?<datasource>.*?) depName=(?<depName>.*?)( versioning=(?<versioning>.*?))?(?: extractVersion=(?<extractVersion>.*?))?\\s.*?_(?:version|tag)\\s*=\\s*\"(?<currentValue>.*)\""
+      ],
+      "versioningTemplate": "{{#if versioning}}{{{versioning}}}{{/if}}"
+    },
+    {
+      "customType": "regex",
+      "managerFilePatterns": [
+        "/.+\\.tf$/"
+      ],
+      "matchStrings": [
+        ".*amiFilter=(?<packageName>.*?)\n(.*currentImageName=(?<currentDigest>.*?)\n)?(.*\n)?.*?(?<depName>[a-zA-Z0-9-_]*)\\s*=\\s*\"(?<currentValue>ami-[a-z0-9]{17})\""
+      ],
+      "datasourceTemplate": "aws-machine-image",
+      "versioningTemplate": "aws-machine-image"
+    }
+  ],
   "packageRules": [
     {
       "matchManagers": [
