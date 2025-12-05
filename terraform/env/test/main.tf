@@ -36,10 +36,11 @@ provider "secretsmanager" {
 module "flex_gateway" {
   source = "../../modules/flex_gateway"
 
-  env_name         = "test"
-  app_name         = "flex-gateway"
-  dev_mode         = true
-  flex_gateway_tag = "mulesoft/flex-gateway:1.10.3"
+  env_name = "test"
+  app_name = "flex-gateway"
+  dev_mode = true
+  # renovate: datasource=docker depName=mulesoft/flex-gateway
+  flex_gateway_tag = "1.10.3"
   # *.phila.gov
   acm_cert_arn = "arn:aws:acm:us-east-1:975050025792:certificate/dc0c25c0-84e6-45aa-90b5-590f8bd8296c"
   # Non-prod vpc
