@@ -4,9 +4,9 @@ resource "aws_ssm_parameter" "s3_name" {
   type  = "String"
 }
 
-resource "aws_ssm_parameter" "flex_gateway_version" {
-  name  = "/${var.app_name}/${var.env_name}/flex_gateway_version"
-  value = var.flex_gateway_version
+resource "aws_ssm_parameter" "flex_gateway_tag" {
+  name  = "/${var.app_name}/${var.env_name}/flex_gateway_tag"
+  value = var.flex_gateway_tag
   type  = "String"
 }
 

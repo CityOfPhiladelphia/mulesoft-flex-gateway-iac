@@ -20,6 +20,36 @@
       ],
       "rangeStrategy": "pin",
       "pinDigests": true
+    },
+    {
+      "matchFileNames": [
+        "terraform/env/dev/**"
+      ],
+      "matchDatasources": [
+        "docker"
+      ],
+      "commitMessagePrefix": "[dev]",
+      "additionalBranchPrefix": "dev-"
+    },
+    {
+      "matchFileNames": [
+        "terraform/env/test/**"
+      ],
+      "matchDatasources": [
+        "docker"
+      ],
+      "commitMessagePrefix": "[test]",
+      "additionalBranchPrefix": "test-"
+    },
+    {
+      "matchFileNames": [
+        "terraform/env/prod/**"
+      ],
+      "matchDatasources": [
+        "docker"
+      ],
+      "commitMessagePrefix": "[prod]",
+      "additionalBranchPrefix": "prod-"
     }
   ]
 }
