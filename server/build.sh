@@ -28,13 +28,13 @@ mkdir -p flex-gateway/conf
 envsubst <flex-gateway/templates/redis-config-template.yaml >flex-gateway/conf/redis-config.yaml
 envsubst <flex-gateway/templates/logs-config-template.yaml >flex-gateway/conf/logs-config.yaml
 # Get flex gateway version
-export FLEX_GATEWAY_VERSION=$(aws ssm get-parameter --name "/$APP_NAME/$ENV_NAME/flex_gateway_version" --query "Parameter.Value" --output text)
+export FLEX_GATEWAY_TAG=$(aws ssm get-parameter --name "/$APP_NAME/$ENV_NAME/flex_gateway_tag" --query "Parameter.Value" --output text)
 # Run all these commands as ec2-user (required because it establishes new docker group)
-sudo -u ec2-user --preserve-env=APP_NAME,ENV_NAME,FLEX_GATEWAY_VERSION -i <<'EOF'
+sudo -u ec2-user --preserve-env=APP_NAME,ENV_NAME,FLEX_GATEWAY_TAG -i <<'EOF'
 cd ~/mulesoft-flex-gateway-iac/server/flex-gateway
-docker pull mulesoft/flex-gateway:$FLEX_GATEWAY_VERSION
+docker pull mulesoft/flex-gateway:$FLEX_GATEWAY_TAG
 # We tag it locally as "latest" so that when we do `docker run` it doesnt try to download it again
-docker tag mulesoft/flex-gateway:$FLEX_GATEWAY_VERSION mulesoft/flex-gateway:latest
+docker tag mulesoft/flex-gateway:$FLEX_GATEWAY_TAG mulesoft/flex-gateway:latest
 bash run-flex-gateway.sh
 EOF
 

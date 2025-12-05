@@ -33,17 +33,14 @@ provider "aws" {
 provider "secretsmanager" {
 }
 
-variable "ec2_ami_id" {
-  type = string
-}
-
 module "flex_gateway" {
   source = "../../modules/flex_gateway"
 
-  env_name             = "test"
-  app_name             = "flex-gateway"
-  dev_mode             = true
-  flex_gateway_version = "1.10.3"
+  env_name = "test"
+  app_name = "flex-gateway"
+  dev_mode = true
+  # renovate: datasource=docker depName=mulesoft/flex-gateway
+  flex_gateway_tag = "1.10.3"
   # *.phila.gov
   acm_cert_arn = "arn:aws:acm:us-east-1:975050025792:certificate/dc0c25c0-84e6-45aa-90b5-590f8bd8296c"
   # Non-prod vpc
@@ -60,8 +57,10 @@ module "flex_gateway" {
   # EC2
   ec2_instance_type = "t3.small"
   ssh_key_name      = "dev-key"
-  ec2_ami_id        = var.ec2_ami_id
-  build_branch      = "main"
+  # amiFilter=[{"Name":"owner-id","Values":["137112412989"]},{"Name":"name","Values":["al2023-ami-*"]},{"Name":"architecture","Values":["x86_64"]},{"Name":"virtualization-type","Values":["hvm"]}]
+  # currentImageName=test123
+  ec2_ami_id   = "ami-0f00d706c4a80fd93"
+  build_branch = "main"
   # non-prod remote SG
   ssh_sg_id = "sg-0014e8d551f6d514b"
   # Shared GSG -> Flex-Gateway -> Test-Registration
