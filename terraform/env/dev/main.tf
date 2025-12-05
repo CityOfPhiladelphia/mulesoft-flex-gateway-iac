@@ -1,18 +1,18 @@
 terraform {
   required_version = "~> 1.12"
 
-  cloud {
-    organization = "Philadelphia"
-
-    workspaces {
-      name = "mulesoft-flex-gateway-dev"
-    }
+  backend "s3" {
+    bucket = "phl-citygeo-terraform-state"
+    # CHANGE ME!
+    key          = "flex-gateway/dev"
+    region       = "us-east-1"
+    use_lockfile = true
   }
 
   required_providers {
     aws = {
       source  = "hashicorp/aws"
-      version = "6.21.0"
+      version = "6.25.0"
     }
     secretsmanager = {
       source  = "keeper-security/secretsmanager"
@@ -23,6 +23,11 @@ terraform {
 
 provider "aws" {
   region = "us-east-1"
+
+  assume_role {
+    role_arn     = "arn:aws:iam::975050025792:role/TFRole"
+    session_name = "tf"
+  }
 }
 
 provider "secretsmanager" {
