@@ -33,10 +33,6 @@ provider "aws" {
 provider "secretsmanager" {
 }
 
-variable "ec2_ami_id" {
-  type = string
-}
-
 module "flex_gateway" {
   source = "../../modules/flex_gateway"
 
@@ -60,8 +56,10 @@ module "flex_gateway" {
   # EC2
   ec2_instance_type = "t3.small"
   ssh_key_name      = "dev-key"
-  ec2_ami_id        = var.ec2_ami_id
-  build_branch      = "main"
+  # amiFilter=[{"Name":"owner-id","Values":["137112412989"]},{"Name":"name","Values":["al2023-ami-*"]},{"Name":"architecture","Values":["x86_64"]},{"Name":"virtualization-type","Values":["hvm"]}]
+  # currentImageName=test123
+  ec2_ami_id   = "ami-080c353f4798a202f"
+  build_branch = "main"
   # prod remote SG
   ssh_sg_id = "sg-0ef9b74fa74804bcb"
   # Shared GSG -> Flex-Gateway -> Prod-Registration
