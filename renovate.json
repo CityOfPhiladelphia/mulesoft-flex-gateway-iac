@@ -49,7 +49,8 @@
         "terraform/env/dev/**"
       ],
       "matchDatasources": [
-        "docker"
+        "docker",
+        "amazon-machine-image"
       ],
       "commitMessagePrefix": "[dev]",
       "additionalBranchPrefix": "dev-"
@@ -59,7 +60,8 @@
         "terraform/env/test/**"
       ],
       "matchDatasources": [
-        "docker"
+        "docker",
+        "amazon-machine-image"
       ],
       "commitMessagePrefix": "[test]",
       "additionalBranchPrefix": "test-"
@@ -69,7 +71,8 @@
         "terraform/env/prod/**"
       ],
       "matchDatasources": [
-        "docker"
+        "docker",
+        "amazon-machine-image"
       ],
       "commitMessagePrefix": "[prod]",
       "additionalBranchPrefix": "prod-"
