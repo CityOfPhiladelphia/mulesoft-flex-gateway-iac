@@ -12,7 +12,7 @@ terraform {
   required_providers {
     aws = {
       source  = "hashicorp/aws"
-      version = "6.25.0"
+      version = "6.27.0"
     }
     secretsmanager = {
       source  = "keeper-security/secretsmanager"
@@ -40,7 +40,7 @@ module "flex_gateway" {
   app_name = "flex-gateway"
   dev_mode = true
   # renovate: datasource=docker depName=mulesoft/flex-gateway
-  flex_gateway_tag = "1.10.4"
+  flex_gateway_tag = "1.10.5"
   # *.phila.gov
   acm_cert_arn = "arn:aws:acm:us-east-1:975050025792:certificate/dc0c25c0-84e6-45aa-90b5-590f8bd8296c"
   # Prod vpc
@@ -59,8 +59,8 @@ module "flex_gateway" {
   ssh_key_name      = "dev-key"
   # Note: AMI is hardcoded to Kernel 6.12. Make note to occasionally update that manually
   # amiFilter=[{"Name":"owner-id","Values":["137112412989"]},{"Name":"name","Values":["al2023-ami-2023*-kernel-6.12-x86_64"]},{"Name":"architecture","Values":["x86_64"]},{"Name":"virtualization-type","Values":["hvm"]}]
-  # currentImageName=al2023-ami-2023.9.20251117.1-kernel-6.12-x86_64
-  ec2_ami_id   = "ami-0f00d706c4a80fd93"
+  # currentImageName=al2023-ami-2023.9.20251208.0-kernel-6.12-x86_64
+  ec2_ami_id   = "ami-08d7aabbb50c2c24e"
   build_branch = "main"
   # prod remote SG
   ssh_sg_id = "sg-0ef9b74fa74804bcb"
