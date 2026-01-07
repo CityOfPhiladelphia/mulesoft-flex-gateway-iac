@@ -23,7 +23,7 @@ prometheus.remote_write "prod" {
     url = "https://citygeo-grafana.phila.gov:9090/api/v1/push"
 
     headers = {
-      "X-Scope-OrgID" = "citygeo"
+      "X-Scope-OrgID" = "citygeo",
     }
 
     basic_auth {
