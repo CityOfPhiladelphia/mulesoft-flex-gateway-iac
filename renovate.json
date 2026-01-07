@@ -33,6 +33,15 @@
       ],
       "datasourceTemplate": "aws-machine-image",
       "versioningTemplate": "aws-machine-image"
+    },
+    {
+      "customType": "regex",
+      "managerFilePatterns": [
+        "/.+\\.hcl/"
+      ],
+      "matchStrings": [
+        "\\/\\/\\s*renovate:\\s*datasource=(?<datasource>[^\\s]+)\\s*\\n\\s*repository\\s*=\\s*\"https://github\\.com/(?<depName>[^\"]+)\\.git\"\\s*\\n\\s*revision\\s*=\\s*\"(?<currentValue>[^\"]+)\"\\s*"
+      ]
     }
   ],
   "packageRules": [
