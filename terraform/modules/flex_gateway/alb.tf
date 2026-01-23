@@ -30,6 +30,11 @@ resource "aws_lb" "main" {
   tags                       = local.default_tags
 }
 
+resource "aws_wafv2_web_acl_association" "main" {
+  resource_arn = aws_lb.main.arn
+  web_acl_arn  = aws_wafv2_web_acl.main.arn
+}
+
 resource "aws_lb_listener" "http" {
   load_balancer_arn = aws_lb.main.arn
   port              = "80"
