@@ -13,6 +13,15 @@ resource "aws_wafv2_web_acl" "main" {
     sampled_requests_enabled   = true
   }
 
+  custom_response_body {
+    key = "CartoRateLimitError"
+    content = jsonencode({
+      error   = "Too Many Requests"
+      message = "You have exceeded the rate limit for /carto-legacy/"
+    })
+    content_type = "APPLICATION_JSON"
+  }
+
   ##########################
   # 0. Atlas Carto bypass, allow a higher limit than we normally would for carto
   rule {
