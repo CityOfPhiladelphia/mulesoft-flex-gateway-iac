@@ -6,6 +6,10 @@ It is recommended to test all development locally with the test environment, and
 
 Check out the credentials that are pulled from Keeper in the [.github/workflows](.github/workflows) files. Set those up locally.
 
+You can also directly use your own client-config.json that you setup for Keeper CLI usage like this:
+
+`export KEEPER_CREDENTIAL=$(cat ~/client-config.json | base64 | tr -d '\n')`
+
 ### Developing AWS / Terraform code
 
 Just use `terraform apply` locally from your development machine. Please use the `test` environment and reserve applying the prod environment for Github actions.
