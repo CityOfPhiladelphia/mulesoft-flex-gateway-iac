@@ -1,5 +1,5 @@
 resource "aws_cloudwatch_log_group" "waf_logs" {
-  name              = "aws-waf-logs-flex-gateway"
+  name              = "aws-waf-logs-${var.env_name}-flex-gateway"
   retention_in_days = 14
 }
 
@@ -7,7 +7,6 @@ resource "aws_wafv2_web_acl_logging_configuration" "main" {
   log_destination_configs = [aws_cloudwatch_log_group.waf_logs.arn]
   resource_arn            = aws_wafv2_web_acl.main.arn
 
-  # Optional: Filter logs to save money (e.g., only log Blocks)
   logging_filter {
     default_behavior = "DROP"
 
@@ -191,6 +190,20 @@ resource "aws_wafv2_web_acl" "main" {
             captcha {}
           }
         }
+        scope_down_statement {
+          byte_match_statement {
+            search_string = "/carto-legacy/"
+            field_to_match {
+              uri_path {}
+            }
+            positional_constraint = "STARTS_WITH"
+            text_transformation {
+              priority = 0
+              type     = "NONE"
+            }
+          }
+        }
+
       }
     }
     visibility_config {
