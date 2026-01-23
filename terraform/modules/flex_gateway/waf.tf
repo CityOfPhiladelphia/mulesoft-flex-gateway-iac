@@ -14,7 +14,7 @@ resource "aws_wafv2_web_acl" "main" {
   }
 
   ##########################
-  # 0. Atlas Carto bypass
+  # 0. Atlas Carto bypass, allow a higher limit than we normally would for carto
   rule {
     name     = "Atlas-carto-rate-limit"
     priority = 4
@@ -36,14 +36,12 @@ resource "aws_wafv2_web_acl" "main" {
           and_statement {
 
             # Condition 1: Header Match
-
-
             statement {
               byte_match_statement {
-                search_string = "atlas.phila.gov"
+                search_string = "https://atlas.phila.gov/"
                 field_to_match {
                   single_header {
-                    name = "referer"
+                    name = "origin"
                   }
                 }
                 positional_constraint = "EXACTLY"
@@ -75,7 +73,7 @@ resource "aws_wafv2_web_acl" "main" {
     }
     visibility_config {
       cloudwatch_metrics_enabled = true
-      metric_name                = "CartoAtlasRateLimit"
+      metric_name                = "FlexCartoAtlasRateLimit"
       sampled_requests_enabled   = true
     }
   }
