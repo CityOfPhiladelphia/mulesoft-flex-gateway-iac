@@ -59,8 +59,8 @@ module "flex_gateway" {
   ssh_key_name      = "dev-key"
   # Note: AMI is hardcoded to Kernel 6.12. Make note to occasionally update that manually
   # amiFilter=[{"Name":"owner-id","Values":["137112412989"]},{"Name":"name","Values":["al2023-ami-2023*-kernel-6.12-x86_64"]},{"Name":"architecture","Values":["x86_64"]},{"Name":"virtualization-type","Values":["hvm"]}]
-  # currentImageName=al2023-ami-2023.9.20251208.0-kernel-6.12-x86_64
-  ec2_ami_id   = "ami-08d7aabbb50c2c24e"
+  # currentImageName=al2023-ami-2023.10.20260120.4-kernel-6.12-x86_64
+  ec2_ami_id   = "ami-024ee5112d03921e2"
   build_branch = "main"
   # prod remote SG
   ssh_sg_id = "sg-0ef9b74fa74804bcb"
