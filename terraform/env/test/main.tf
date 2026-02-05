@@ -40,7 +40,7 @@ module "flex_gateway" {
   app_name = "flex-gateway"
   dev_mode = true
   # renovate: datasource=docker depName=mulesoft/flex-gateway
-  flex_gateway_tag = "1.10.5"
+  flex_gateway_tag = "1.11.4"
   # *.phila.gov
   acm_cert_arn = "arn:aws:acm:us-east-1:975050025792:certificate/dc0c25c0-84e6-45aa-90b5-590f8bd8296c"
   # Non-prod vpc
