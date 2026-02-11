@@ -20,7 +20,7 @@ linux_shared_modules.node_exporter "main" {
 
 prometheus.remote_write "prod" {
   endpoint {
-    url = "https://citygeo-grafana.phila.gov:9090/api/v1/push"
+    url = "https://grafana.citygeo.phila.gov:9090/api/v1/push"
 
     headers = {
       "X-Scope-OrgID" = "citygeo",
@@ -132,7 +132,7 @@ loki.process "fluentbit" {
 
 loki.write "prod" {
   endpoint {
-    url = "https://citygeo-grafana.phila.gov:3100/loki/api/v1/push"
+    url = "https://grafana.citygeo.phila.gov:3100/loki/api/v1/push"
     tenant_id = "citygeo"
     basic_auth {
       username = sys.env("LOKI_USER")
