@@ -3,7 +3,7 @@
 import.git "linux_shared_modules" {
   // renovate: datasource=github-releases
   repository = "https://github.com/CityOfPhiladelphia/grafana-alloy-modules.git"
-  revision = "v0.0.17"
+  revision = "v0.0.27"
   // Only pull once, on startup
   pull_frequency = "0s"
   path = "linux"
